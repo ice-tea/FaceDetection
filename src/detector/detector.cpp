@@ -3,7 +3,6 @@
 //
 
 #include <iostream>
-#include <tbb/tbb.h>
 #include <chrono>
 #include "../config.h"
 #include "detector.h"
