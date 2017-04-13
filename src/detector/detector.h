@@ -5,7 +5,6 @@
 #ifndef FACE_RECOG_DETECTOR_H
 #define FACE_RECOG_DETECTOR_H
 
-#include <tbb/tbb.h>
 #include "../image/integral-image.h"
 #include "../trainer/strong-classifier.h"
 #include "../tools/rectangle.h"
@@ -33,8 +32,6 @@ namespace violajones
     Detector(sf::Image image, StrongClassifier classifier)
             : Detector(GreyImage(image), classifier)
     { }
-
-    tbb::concurrent_vector<Rectangle> detect();
 
   public:
     std::shared_ptr<IntegralImage> image_;

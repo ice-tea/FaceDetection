@@ -28,7 +28,7 @@ link_directories(${Boost_LIBRARY_DIRS})
 
 if(SFML_FOUND)
   include_directories(${SFML_INCLUDE_DIR})
-  target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES} ${Boost_LIBRARIES} tbb)
+  target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES} ${Boost_LIBRARIES})
 endif()
 
 # Install target

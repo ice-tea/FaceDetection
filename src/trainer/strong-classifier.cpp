@@ -9,7 +9,6 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderTexture.hpp>
-#include <tbb/tbb.h>
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
 #include "strong-classifier.h"
@@ -20,7 +19,6 @@
 #include "../features/two-horizontal-rectangles-feature.h"
 #include "../features/three-vertical-rectangles-feature.h"
 
-static tbb::mutex mutex;
 namespace violajones
 {
   StrongClassifier::StrongClassifier(std::vector<WeakClassifier> classifiers)
@@ -116,10 +114,6 @@ namespace violajones
     auto tests_set = load_tests_set(tests_dir);
     auto& tests = tests_set.first;
     auto& features_values = tests_set.second;
-
-
-    tbb::atomic<unsigned long> ncached_features = 0;
-
 
     /*
     if (Config::parallelized)
@@ -261,12 +255,12 @@ namespace violajones
     return std::make_shared<GreyImage>(GreyImage(sfimage));
   }
 
-  tbb::concurrent_vector<std::shared_ptr<GreyImage>> StrongClassifier::load_images(std::string dir)
+  vector <std::shared_ptr<GreyImage>> StrongClassifier::load_images(std::string dir)
   {
     namespace fs = boost::filesystem;
     fs::path path(dir);
     fs::directory_iterator end_itr;
-    tbb::concurrent_vector<std::shared_ptr<GreyImage>> images;
+    vector<std::shared_ptr<GreyImage>> images;
 
     size_t number_loaded = 0;
     /*
