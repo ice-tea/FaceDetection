@@ -114,6 +114,7 @@ namespace violajones
     auto tests_set = load_tests_set(tests_dir);
     auto& tests = tests_set.first;
     auto& features_values = tests_set.second;
+    int ncached_features = 0;
 
     /*
     if (Config::parallelized)
