@@ -12,7 +12,7 @@ namespace violajones
   std::vector<Rectangle> Detector::detect()
   {
 
-    tbb::concurrent_vector<Rectangle> rectvect;
+    std::vector<Rectangle> rectvect;
     auto wins = Window::list_windows(image_, squared_image_);
     if (Config::debug_detector_detect)
       std::cout << "Windowlist :" << wins.size() << std::endl;
