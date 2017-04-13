@@ -228,7 +228,10 @@ namespace violajones
     for (auto i = good.size(); i < good.size() + bad.size(); ++i)
       tests.push_back(TestImage(*bad[i - good.size()], badweight, false));
 
+    std::cout << " Computing feature Values\n";
+
     auto features_values = compute_features_values(tests);
+    std::cout << " completed feature Values\n";
     return std::pair<std::vector<TestImage>, std::vector<FeatureValues>>(tests, features_values);
   }
 
@@ -236,8 +239,10 @@ namespace violajones
   {
     std::vector<std::shared_ptr<Feature> > features = Window::list_features();
     std::vector<FeatureValues> features_values;
+    std::cout << "We have "<<features.size() << " featrues to compute\n";
     for (size_t i = 0; i < features.size(); ++i)
     {
+      std::cout << "Computing "<< i<< "th feature Values\n";
       auto values = FeatureValue::compute_all_values_sorted(tests, *features[i]);
       features_values.push_back(FeatureValues(features[i], values));
     }
