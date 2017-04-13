@@ -116,6 +116,7 @@ namespace violajones
     auto& features_values = tests_set.second;
     int ncached_features = 0;
 
+    std::cout << "loading the features\n";
     /*
     if (Config::parallelized)
       tbb::parallel_for_each(features_values.begin(), features_values.end(),
@@ -128,6 +129,8 @@ namespace violajones
       for (FeatureValues& ftvalues : features_values)
         if (ftvalues.values_.size())
           ++ncached_features;
+
+    std::cout << "loading the features completed\n";
 
     auto end = std::chrono::steady_clock::now();
     std::chrono::duration<double> diff = end - start;
