@@ -255,12 +255,12 @@ namespace violajones
     return std::make_shared<GreyImage>(GreyImage(sfimage));
   }
 
-  vector <std::shared_ptr<GreyImage>> StrongClassifier::load_images(std::string dir)
+  std::vector <std::shared_ptr<GreyImage>> StrongClassifier::load_images(std::string dir)
   {
     namespace fs = boost::filesystem;
     fs::path path(dir);
     fs::directory_iterator end_itr;
-    vector<std::shared_ptr<GreyImage>> images;
+    std::vector<std::shared_ptr<GreyImage>> images;
 
     size_t number_loaded = 0;
     /*

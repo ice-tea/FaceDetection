@@ -33,6 +33,8 @@ namespace violajones
             : Detector(GreyImage(image), classifier)
     { }
 
+    std::vector<Rectangle> detect();
+
   public:
     std::shared_ptr<IntegralImage> image_;
     std::shared_ptr<IntegralImage> squared_image_;

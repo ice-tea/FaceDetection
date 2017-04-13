@@ -45,7 +45,7 @@ namespace violajones
 
     static std::shared_ptr<GreyImage> load_image(std::string imagepath);
 
-    static vector<std::shared_ptr<GreyImage>> load_images(std::string dir);
+    static std::vector<std::shared_ptr<GreyImage>> load_images(std::string dir);
 
   public:
     std::vector<WeakClassifier> classifiers_;
