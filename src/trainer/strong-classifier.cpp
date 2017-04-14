@@ -173,11 +173,14 @@ namespace violajones
       }
       else
       */
+        int curF = 0;
         std::for_each(features_values.begin(), features_values.end(),
                       [&](FeatureValues& fv) {
+                        
                         auto new_classifier = TestWeakClassifier::train(tests, validweight, fv);
                         if (best.errors_ > new_classifier.errors_)
                           best = new_classifier;
+                        std::cout << "Computing "<< curF++ << "th feature with "<<new_classifier.errors_<<" error\n";
                       });
 
       end = std::chrono::steady_clock::now();
