@@ -242,7 +242,8 @@ namespace violajones
     std::cout << "We have "<<features.size() << " featrues to compute\n";
     for (size_t i = 0; i < features.size(); ++i)
     {
-      std::cout << "Computing "<< i<< "th feature Values\n";
+      if(i%100==0)
+        std::cout << "Computing "<< i<< "th feature Values\n";
       auto values = FeatureValue::compute_all_values_sorted(tests, *features[i]);
       features_values.push_back(FeatureValues(features[i], values));
     }
