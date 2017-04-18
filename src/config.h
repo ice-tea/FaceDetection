@@ -42,8 +42,11 @@ public:
   static constexpr int window_dy = 1;
 
   /* FEATURE */
-  static constexpr int feature_dx = 1;
-  static constexpr int feature_dy = 1;
+  //static constexpr int feature_dx = 1;
+  //static constexpr int feature_dy = 1;
+  //Bo Li Less Feature
+  static constexpr int feature_dx = 10;
+  static constexpr int feature_dy = 10;
 
   /* LEARNING */
   static unsigned learn_pass;

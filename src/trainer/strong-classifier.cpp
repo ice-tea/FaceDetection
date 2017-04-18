@@ -141,6 +141,8 @@ namespace violajones
     std::vector<WeakClassifier> classifiers;
     unsigned ipass = 1;
     auto global_start = std::chrono::steady_clock::now();
+
+    std::cout<<"Need "<<Config::learn_pass<<" pass"<<std::endl;
     while (ipass <= Config::learn_pass)
     {
       start = std::chrono::steady_clock::now();

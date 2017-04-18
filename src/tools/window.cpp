@@ -109,6 +109,9 @@ namespace violajones
   {
     std::vector<std::shared_ptr<Feature>> features = TwoHorizontalRectanglesFeature::list_features();
 
+    /*
+     * Bo Li Less Features
+     *
     std::vector<std::shared_ptr<Feature>> tmp = TwoVerticalRectanglesFeature::list_features();
     features.insert(features.end(), tmp.begin(), tmp.end());
 
@@ -121,6 +124,7 @@ namespace violajones
     tmp = FourRectanglesFeature::list_features();
     features.insert(features.end(), tmp.begin(), tmp.end());
 
+    */
     return features;
   }
 }
