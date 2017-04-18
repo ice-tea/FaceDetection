@@ -182,7 +182,7 @@ namespace violajones
                         auto new_classifier = TestWeakClassifier::train(tests, validweight, fv);
                         if (best.errors_ > new_classifier.errors_)
                           best = new_classifier;
-                        std::cout << "Computing "<< curF++ << "th feature with "<<new_classifier.errors_<<" error\n";
+                        //std::cout << "Computing "<< curF++ << "th feature with "<<new_classifier.errors_<<" error\n";
                       });
 
       end = std::chrono::steady_clock::now();
