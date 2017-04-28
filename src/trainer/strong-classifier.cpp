@@ -112,6 +112,10 @@ namespace violajones
     << "Loading trainer tests ..." << std::endl;
     auto start = std::chrono::steady_clock::now();
     auto tests_set = load_tests_set(tests_dir);
+    auto end = std::chrono::steady_clock::now();
+    std::chrono::duration<double> diff = end - start;
+    std::cout << "Computer Integral Image in " << diff.count() << " seconds." << std::endl;
+
     auto& tests = tests_set.first;
     auto& features_values = tests_set.second;
     int ncached_features = 0;
@@ -132,7 +136,7 @@ namespace violajones
 
     std::cout << "loading the features completed\n";
 
-    auto end = std::chrono::steady_clock::now();
+    end = std::chrono::steady_clock::now();
     std::chrono::duration<double> diff = end - start;
     std::cout << "Tests loaded in " << diff.count() << " seconds ("
     << ncached_features * 100 / features_values.size()
