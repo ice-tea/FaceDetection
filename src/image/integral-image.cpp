@@ -59,16 +59,39 @@ namespace violajones
     for (auto i = 0; i < width; ++i)
       table.push_back(std::vector<long>(height));
 
-    table[0][0] = type(image.pixels->getPixel(0, 0).r);
+    for (int y = 0; y < height; ++y)
+      for (int x = 0; x < width; ++x)
+        table[x][y] = type(image.pixels->getPixel(x, y).r);
+
     for (int x = 1; x < width; ++x)
-      table[x][0] = table[x - 1][0] + type(image.pixels->getPixel(x, 0).r);
+      table[x][0] += table[x - 1][0];
 
     for (int y = 1; y < height; ++y)
-      table[0][y] = table[0][y - 1] + type(image.pixels->getPixel(0, y).r);
+      table[0][y] += table[0][y - 1];
 
     for (int y = 1; y < height; ++y)
       for (int x = 1; x < width; ++x)
-        table[x][y] = table[x][y - 1] + table[x - 1][y] + type(image.pixels->getPixel(x, y).r) - table[x - 1][y - 1];
+        table[x][y] += (table[x][y - 1] + table[x - 1][y] - table[x - 1][y - 1]);
+  }
+
+  void IntegralImage::compute_integral_image_gpu()
+  {
+    for (auto i = 0; i < width; ++i)
+      table.push_back(std::vector<long>(height));
+
+    size_t bytes = width*height*sizeof(long);
+    h_i = (long*)malloc(bytes);
+    h_o = (long*)malloc(bytes);
+
+    for (int y = 0; y < height; ++y)
+      for (int x = 0; x < width; ++x)
+        h_i[y*width + x] = type(image.pixels->getPixel(x, y).r);
+
+
+
+    for (int y = 0; y < height; ++y)
+      for (int x = 0; x < width; ++x)
+        table[x][y] = h_o[y*width + x];
   }
 
 
