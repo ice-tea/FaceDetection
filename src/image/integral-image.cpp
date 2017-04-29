@@ -80,14 +80,12 @@ namespace violajones
       table.push_back(std::vector<long>(height));
 
     size_t bytes = width*height*sizeof(long);
-    h_i = (long*)malloc(bytes);
-    h_o = (long*)malloc(bytes);
+    long* h_i = (long*)malloc(bytes);
+    long* h_o = (long*)malloc(bytes);
 
     for (int y = 0; y < height; ++y)
       for (int x = 0; x < width; ++x)
         h_i[y*width + x] = type(image.pixels->getPixel(x, y).r);
-
-
 
     for (int y = 0; y < height; ++y)
       for (int x = 0; x < width; ++x)
