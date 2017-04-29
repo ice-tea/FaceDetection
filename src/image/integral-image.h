@@ -36,6 +36,7 @@ namespace violajones
 
   protected:
     void compute_integral_image();
+    void compute_integral_image_gpu();
 
   public:
     GreyImage image;
