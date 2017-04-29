@@ -5,7 +5,9 @@ __global__ void IntegralKernel(long *pic, int width, int height) {
 	
 }
 
-void integral_kernel(long * h_i){
+void integral_kernel(long * h_i, int width, int height){
+	long * d_pic;
+	size_t bytes = width * height * sizeof( long );
 	// Allocate memory for each vector on GPU
     cudaMalloc(&d_pic, bytes);   
  

@@ -87,24 +87,7 @@ namespace violajones
       for (int x = 0; x < width; ++x)
         h_i[y*width + x] = type(image.pixels->getPixel(x, y).r);
 
-    // Allocate memory for each vector on GPU
-    cudaMalloc(&d_pic, bytes);   
- 
-    // Copy host vectors to device
-    cudaMemcpy(d_pic, h_i, bytes, cudaMemcpyHostToDevice);
-
-    // Setup the execution configuration
-    dim3 dimBlock(BLOCK_WIDTH, BLOCK_WIDTH);
-    dim3 dimGrid((width-1)/TILE_WIDTH + 1, (height-1)/TILE_WIDTH + 1, 1);
-
-    // Launch the device computation threads!
-    IntegralKernel<<<dimGrid, dimBlock>>>(d_pic, width, height);
-
-    // Copy array back to host
-    cudaMemcpy(h_i, d_pic, bytes, cudaMemcpyDeviceToHost); 
-
-    // Free device matrices
-    cudaFree(d_pic);
+    integral_kernel(h_i, width, height);
 
     for (int y = 0; y < height; ++y)
       for (int x = 0; x < width; ++x)
