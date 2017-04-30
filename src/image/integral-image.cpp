@@ -11,7 +11,8 @@ namespace violajones
   IntegralImage::IntegralImage(GreyImage grey_image, std::function<long(byte)> type)
           : image{grey_image}, type{type}, width{grey_image.width}, height{grey_image.height}
   {
-    compute_integral_image();
+    //compute_integral_image();
+    compute_integral_image_gpu();
   }
 
   IntegralImage::IntegralImage(GreyImage grey_image)
@@ -93,6 +94,4 @@ namespace violajones
       for (int x = 0; x < width; ++x)
         table[x][y] = h_i[y*width + x];
   }
-
-
 }
