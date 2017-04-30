@@ -22,7 +22,7 @@ __global__ void IntegralKernelHeight(long *pic, int width, int height) {
     if (startPos <= height * (width-1) ){
         for(int k=1; k<height; ++k){
             pic[startPos+ width] += pic[startPos];
-            stratPos += width;
+            startPos += width;
         }
     }
 }
