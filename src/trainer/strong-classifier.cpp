@@ -230,12 +230,20 @@ namespace violajones
 
     std::cout << "Image size is " <<  good[0]->width << " * " << good[0]->height << std::endl;
 
+    std::cout << " Computing IntegralImage\n";
+    auto startI = std::chrono::steady_clock::now();
+
     std::vector<TestImage> tests;
     for (size_t i = 0; i < good.size(); ++i)
       tests.push_back(TestImage(*good[i], goodweight, true));
 
     for (auto i = good.size(); i < good.size() + bad.size(); ++i)
       tests.push_back(TestImage(*bad[i - good.size()], badweight, false));
+
+    std::cout << " completed IntegralImage\n";
+    auto endI = std::chrono::steady_clock::now();
+    std::chrono::duration<double> diffI = endI - startI;
+    std::cout << "Computing IntegralImage in " << diffI.count() << " seconds."<< std::endl;
 
     std::cout << " Computing feature Values\n";
     auto start = std::chrono::steady_clock::now();
