@@ -12,10 +12,10 @@
 # include "grey-image.h"
 # include "../tools/point.h"
 
+extern void integral_kernel(long *a, int w, int h);
+
 namespace violajones
 {
-  extern void integral_kernel(long *a, int w, int h);
-  
   class IntegralImage
   {
   public:
