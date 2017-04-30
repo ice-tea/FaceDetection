@@ -18,13 +18,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR})
 cuda_add_executable(${EXECUTABLE_NAME} ${INTEGRAL_O} ${sources_files} src/image/integral-image.cpp)
 #cuda_add_executable(GPU ${INTEGRAL_O} ${EXECUTABLE_NAME})
 
-
-# Define sources and executable
-file(GLOB_RECURSE sources_files src/*)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR})
-add_executable(${EXECUTABLE_NAME} ${sources_files})
-
-
 # Detect and add SFML
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
 #Find any version 2.X of SFML
