@@ -228,7 +228,7 @@ namespace violajones
     double goodweight = 1.0 / (2 * good.size());
     double badweight = 1.0 / (2 * bad.size());
 
-    std::cout << "Image size is " <<  good[i]->width << " * " << good[0]->height << std::endl;
+    std::cout << "Image size is " <<  good[0]->width << " * " << good[0]->height << std::endl;
 
     std::vector<TestImage> tests;
     for (size_t i = 0; i < good.size(); ++i)
