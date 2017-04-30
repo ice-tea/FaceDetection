@@ -135,6 +135,7 @@ namespace violajones
 
     auto end = std::chrono::steady_clock::now();
     std::chrono::duration<double> diff = end - start;
+
     std::cout << "Tests loaded in " << diff.count() << " seconds ("
     << ncached_features * 100 / features_values.size()
     << "% cached)\n Launching training..." << std::endl;
@@ -226,6 +227,8 @@ namespace violajones
 
     double goodweight = 1.0 / (2 * good.size());
     double badweight = 1.0 / (2 * bad.size());
+
+    std::cout << "Image size is " <<  good[i]->width << " * " << good[0]->height << std::endl;
 
     std::vector<TestImage> tests;
     for (size_t i = 0; i < good.size(); ++i)
