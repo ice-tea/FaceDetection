@@ -8,9 +8,10 @@ find_package(CUDA)
 
 # Define sources and executable
 file(GLOB_RECURSE sources_files src/*)
-file(GLOB CUDA_FILES "src/" *.cu)
+# file(GLOB CUDA_FILES "src/" *.cu)
 list( APPEND CUDA_NVCC_FLAGS "-Wno-deprecated-gpu-targets -std=c++11")
-CUDA_COMPILE(CU_O ${CUDA_FILES})
+cuda_add_library(kernel_obj src/image/integral-kernel.cu)
+#CUDA_COMPILE(CU_O ${CUDA_FILES})
 
 
 # SETUP FOR CPP FILES
@@ -18,9 +19,11 @@ set(CMAKE_CXX_COMPILER "g++")
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -std=c++14 -pedantic -fPIC -c")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR})
 #add_executable(${EXECUTABLE_NAME} ${sources_files} ${INTEGRAL_O} src/image/integral-kernel.cu src/image/integral-image.cpp)
-cuda_add_executable(${EXECUTABLE_NAME} ${sources_files} ${CU_O})
+#cuda_add_executable(${EXECUTABLE_NAME} ${sources_files} ${CU_O})
 #cuda_add_executable(GPU ${INTEGRAL_O} ${EXECUTABLE_NAME})
-
+cuda_add_executable(${EXECUTABLE_NAME} ${sources_files})
+target_link_libraries(${EXECUTABLE_NAME} ${CUDA_LIBRARIES})
+target_link_libraries(${EXECUTABLE_NAME} kernel_obj)
 
 # Detect and add SFML
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})

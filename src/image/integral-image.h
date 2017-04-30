@@ -14,6 +14,8 @@
 
 namespace violajones
 {
+  extern void integral_kernel(long *a, int w, int h);
+  
   class IntegralImage
   {
   public:
