@@ -15,10 +15,10 @@ void integral_kernel(long * h_i, int width, int height){
     cudaMemcpy(d_pic, h_i, bytes, cudaMemcpyHostToDevice);
 
     // Setup the execution configuration
-    int BLOCK_WIDTH = 10;
-    int BLOCK_WIDTH = 10;
-    dim3 dimBlock(BLOCK_WIDTH, BLOCK_WIDTH);
-    dim3 dimGrid((width-1)/TILE_WIDTH + 1, (height-1)/TILE_WIDTH + 1, 1);
+    //int BLOCK_WIDTH = 10;
+    //int BLOCK_WIDTH = 10;
+    dim3 dimBlock(10, 10);
+    dim3 dimGrid((width-1)/10 + 1, (height-1)/10 + 1, 1);
 
     // Launch the device computation threads!
     IntegralKernel<<<dimGrid, dimBlock>>>(d_pic, width, height);
