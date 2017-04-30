@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include "integral-image.h"
-#include "integral-kernel.cu"
+//#include "integral-kernel.cu"
 
 namespace violajones
 {
