@@ -1,5 +1,4 @@
 cmake_minimum_required(VERSION 2.8)
-find_package(CUDA QUIET REQUIRED)
 
 project(facedetect)
 set(EXECUTABLE_NAME "facedetect")
@@ -7,14 +6,17 @@ set(EXECUTABLE_NAME "facedetect")
 set(CMAKE_CXX_COMPILER "g++")
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -std=c++14 -pedantic -fPIC")
 
+#cuda
+find_package(CUDA)
+set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} -Wno-deprecated-gpu-targets -std=c++11" )
+cuda_compile(INTEGRAL_O src/image/integral-kernel.cu)
+cuda_add_executable(GPU ${INTEGRAL_O})
 
 # Define sources and executable
 file(GLOB_RECURSE sources_files src/*)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR})
 add_executable(${EXECUTABLE_NAME} ${sources_files})
-# Specify binary name and source file to build it from
-cuda_add_executable(
-    src/image/integral-kernel.cu)
+
 
 # Detect and add SFML
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})

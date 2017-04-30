@@ -15,6 +15,8 @@ void integral_kernel(long * h_i, int width, int height){
     cudaMemcpy(d_pic, h_i, bytes, cudaMemcpyHostToDevice);
 
     // Setup the execution configuration
+    int BLOCK_WIDTH = 10;
+    int BLOCK_WIDTH = 10;
     dim3 dimBlock(BLOCK_WIDTH, BLOCK_WIDTH);
     dim3 dimGrid((width-1)/TILE_WIDTH + 1, (height-1)/TILE_WIDTH + 1, 1);
 
