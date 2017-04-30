@@ -1,8 +1,30 @@
 #ifndef _INTEGRAL_KERNEL_H_
 #define _INTEGRAL_KERNEL_H_
 
-__global__ void IntegralKernel(long *pic, int width, int height) {
-	
+__global__ void IntegralKernelWidth(long *pic, int width, int height) {
+	// Get our global thread ID
+    int id = blockIdx.x*blockDim.x+threadIdx.x;
+    // Make sure we do not go out of bounds
+    int startPos = id * width;
+    if (startPos <= width * (height-1) ){
+        for(int k=1; k<width; ++k){
+            pic[startPos+1] += pic[startPos]; 
+            startPos++;
+        }
+    }
+}
+
+__global__ void IntegralKernelHeight(long *pic, int width, int height) {
+	// Get our global thread ID
+    int id = blockIdx.x*blockDim.x+threadIdx.x;
+    // Make sure we do not go out of bounds
+    int startPos = id * height;
+    if (startPos <= height * (width-1) ){
+        for(int k=1; k<height; ++k){
+            pic[startPos+ width] += pic[startPos];
+            stratPos += width;
+        }
+    }
 }
 
 void integral_kernel(long * h_i, int width, int height){
@@ -14,14 +36,9 @@ void integral_kernel(long * h_i, int width, int height){
     // Copy host vectors to device
     cudaMemcpy(d_pic, h_i, bytes, cudaMemcpyHostToDevice);
 
-    // Setup the execution configuration
-    //int BLOCK_WIDTH = 10;
-    //int BLOCK_WIDTH = 10;
-    dim3 dimBlock(10, 10);
-    dim3 dimGrid((width-1)/10 + 1, (height-1)/10 + 1, 1);
-
     // Launch the device computation threads!
-    IntegralKernel<<<dimGrid, dimBlock>>>(d_pic, width, height);
+    IntegralKernelWidth<<<1, width>>>(d_pic, width, height);
+    IntegralKernelHeight<<<1, height>>>(d_pic, width, height);
 
     // Copy array back to host
     cudaMemcpy(h_i, d_pic, bytes, cudaMemcpyDeviceToHost); 

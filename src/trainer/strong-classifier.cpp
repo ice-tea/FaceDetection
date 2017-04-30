@@ -238,9 +238,14 @@ namespace violajones
       tests.push_back(TestImage(*bad[i - good.size()], badweight, false));
 
     std::cout << " Computing feature Values\n";
+    auto start = std::chrono::steady_clock::now();
 
     auto features_values = compute_features_values(tests);
     std::cout << " completed feature Values\n";
+    auto end = std::chrono::steady_clock::now();
+    std::chrono::duration<double> diff = end - start;
+    std::cout << "Computing Featrues in " << diff.count() << " seconds."<< std::endl;
+
     return std::pair<std::vector<TestImage>, std::vector<FeatureValues>>(tests, features_values);
   }
 
