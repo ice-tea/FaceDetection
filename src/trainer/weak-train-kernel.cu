@@ -6,7 +6,7 @@ __global__ void KernelWeakTrain(long *pic, int width, int height) {
     int id = blockIdx.x*blockDim.x+threadIdx.x;
 }
 
-void select_best_gpu(std::vector<TestImage> tests, double validweight, int featureNum, int* deatureIndex){
+void select_best_gpu(bool * valids, double * weights, double validweight, int featureNum, int* deatureIndex){
 
     int testNum = tests.size();
 

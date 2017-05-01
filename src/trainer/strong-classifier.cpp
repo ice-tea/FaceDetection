@@ -19,7 +19,7 @@
 #include "../features/two-horizontal-rectangles-feature.h"
 #include "../features/three-vertical-rectangles-feature.h"
 
-extern select_best_gpu(std::vector<TestImage> tests, double validweight, int featureNum, int * featureIndex){
+extern select_best_gpu(bool * valids, double * weights, double validweight, int featureNum, int * featureIndex){
 
 
 }
@@ -196,7 +196,18 @@ namespace violajones
       else
       */
 
-      best = select_best_gpu(tests, validweight, features_values.size(), featureIndexfeatures_values);
+      //Read Only Data
+      size_t bytesV = testNum * sizeof( bool );
+      bool * valids = (bool*)malloc(bytesV);
+      size_t bytesF = testNum*sizeof(double);
+      double* weights = (double*)malloc(bytesF);
+
+      for(int i=0; i<testNums; ++i){
+          valids[i] = tests[i].valid_;
+          weights[i] = tests[i].weight_;
+      }
+
+      best = select_best_gpu(valids, weights, validweight, features_values.size(), featureIndexfeatures_values);
       
         std::for_each(features_values.begin(), features_values.end(),
                       [&](FeatureValues& fv) {
