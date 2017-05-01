@@ -19,6 +19,11 @@
 #include "../features/two-horizontal-rectangles-feature.h"
 #include "../features/three-vertical-rectangles-feature.h"
 
+extern select_best_gpu(std::vector<TestImage> tests, double validweight, int featureNum, int * featureIndex){
+
+
+}
+
 namespace violajones
 {
   StrongClassifier::StrongClassifier(std::vector<WeakClassifier> classifiers)
@@ -145,6 +150,19 @@ namespace violajones
     auto global_start = std::chrono::steady_clock::now();
 
     std::cout<<"Need "<<Config::learn_pass<<" pass"<<std::endl;
+
+    // Bo Li
+    int featureNum = features_values.size();
+    int testNum = tests.size();
+    int * featureIndexfeatures_values = (int *)malloc(featureNum * testNum * sizeof(int));
+    for(int i=0; i<featureNum; ++i){
+      for(int j=0; j<testNum; ++j){
+        featureIndexfeatures_values[i*testNum + j] = features_values[i].values_[j].test_index_;
+        std::cout<<featureIndexfeatures_values[i*testNum + j]<<" ";
+      }
+      std::cout<<std::endl;
+    }
+
     while (ipass <= Config::learn_pass)
     {
       start = std::chrono::steady_clock::now();
@@ -177,15 +195,17 @@ namespace violajones
       }
       else
       */
-        int curF = 0;
+
+      best = select_best_gpu(tests, validweight, features_values.size(), featureIndexfeatures_values);
+      
         std::for_each(features_values.begin(), features_values.end(),
                       [&](FeatureValues& fv) {
                         
                         auto new_classifier = TestWeakClassifier::train(tests, validweight, fv);
                         if (best.errors_ > new_classifier.errors_)
                           best = new_classifier;
-                        //std::cout << "Computing "<< curF++ << "th feature with "<<new_classifier.errors_<<" error\n";
-                      });
+                        });
+      
 
       end = std::chrono::steady_clock::now();
       diff = end - start;
