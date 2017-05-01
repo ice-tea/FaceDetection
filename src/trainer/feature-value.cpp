@@ -50,6 +50,19 @@ namespace violajones
     }
     return values;
   }
+  /*
+  std::vector<FeatureValue> FeatureValue::compute_all_values_gpu(std::vector<TestImage>& tests,
+                                                             Feature& feature)
+  {
+    std::vector<FeatureValue> values;
+    for (size_t i = 0; i < tests.size(); ++i)
+    {
+      auto feature_value = feature.compute_value(tests[i].image_);
+      values.push_back(FeatureValue((short) i, Feature::normalize_feature(feature_value, tests[i].derivation_)));
+    }
+    return values;
+  }
+  */
 
   std::vector<FeatureValue> FeatureValue::compute_all_values_sorted(std::vector<TestImage>& tests,
                                                                     Feature& feature)
