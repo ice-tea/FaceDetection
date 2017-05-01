@@ -202,12 +202,12 @@ namespace violajones
       size_t bytesF = testNum*sizeof(double);
       double* weights = (double*)malloc(bytesF);
 
-      for(int i=0; i<testNums; ++i){
+      for(int i=0; i<testNum; ++i){
           valids[i] = tests[i].valid_;
           weights[i] = tests[i].weight_;
       }
 
-      best = select_best_gpu(valids, weights, validweight, features_values.size(), featureIndexfeatures_values);
+      select_best_gpu(valids, weights, validweight, features_values.size(), featureIndexfeatures_values);
       
         std::for_each(features_values.begin(), features_values.end(),
                       [&](FeatureValues& fv) {

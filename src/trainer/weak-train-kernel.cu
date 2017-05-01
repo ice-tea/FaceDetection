@@ -6,7 +6,7 @@ __global__ void KernelWeakTrain(long *pic, int width, int height) {
     int id = blockIdx.x*blockDim.x+threadIdx.x;
 }
 
-void select_best_gpu(bool * valids, double * weights, double validweight, int featureNum, int* deatureIndex){
+int select_best_gpu(bool * valids, double * weights, double validweight, int featureNum, int* deatureIndex){
 
     // Allocate memory for each vector on GPU
     /*
