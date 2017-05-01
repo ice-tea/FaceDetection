@@ -10,7 +10,7 @@ find_package(CUDA)
 file(GLOB_RECURSE sources_files src/*)
 # file(GLOB CUDA_FILES "src/" *.cu)
 list( APPEND CUDA_NVCC_FLAGS "-Wno-deprecated-gpu-targets -std=c++11")
-cuda_add_library(kernel_obj src/image/integral-kernel.cu)
+cuda_add_library(kernel_obj src/image/integral-kernel.cu src/trainer/weak-train-kernel.cu)
 target_link_libraries(kernel_obj)
 #CUDA_COMPILE(CU_O ${CUDA_FILES})
 
