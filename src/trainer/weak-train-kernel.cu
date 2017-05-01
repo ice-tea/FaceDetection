@@ -8,17 +8,6 @@ __global__ void KernelWeakTrain(long *pic, int width, int height) {
 
 void select_best_gpu(bool * valids, double * weights, double validweight, int featureNum, int* deatureIndex){
 
-    int testNum = tests.size();
-
-    //Read Only Data
-    size_t bytesV = testNum * sizeof( bool );
-	bool * valids = (bool*)malloc(bytesV);
-    size_t bytesF = width*height*sizeof(double);
-    double* weights = (double*)malloc(bytesF);
-    for(int i=0; i<testNums; ++i){
-        valids[i] = tests[i].valid_;
-        weights[i] = tests[i].weight_;
-    }
     // Allocate memory for each vector on GPU
     /*
     int featureNum = features_values.size();
