@@ -16,6 +16,8 @@ __global__ void KernelWeakTrain(int *index, int testNum) {
 void select_best_gpu(int featureNum, int testNum, bool * valids, double * weights, double validweight, int* featureIndex,
     int & index, bool & good, double & error){
 
+    bool * V;
+    double * W;
     cudaMemcpyToSymbol(V, valids, FNUM *sizeof(bool));
     cudaMemcpyToSymbol(W, weights, FNUM *sizeof(double));
 
