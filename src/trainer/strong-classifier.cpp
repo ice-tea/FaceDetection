@@ -19,7 +19,7 @@
 #include "../features/two-horizontal-rectangles-feature.h"
 #include "../features/three-vertical-rectangles-feature.h"
 
-extern void select_best_gpu(bool * valids, double * weights, double validweight, int featureNum, int * featureIndex,
+extern void select_best_gpu(int featureNum, int testNum, bool * valids, double * weights, double validweight, int * featureIndex,
     int & index, bool & good, double & error);
 
 namespace violajones
@@ -209,7 +209,7 @@ namespace violajones
       bool b_good = 0;
       double b_error = std::numeric_limits<double>::max();
 
-      select_best_gpu(valids, weights, validweight, features_values.size(), featureIndexfeatures_values,
+      select_best_gpu(featureNum, testNum, valids, weights, validweight, featureIndexfeatures_values,
          b_index, b_good, b_error);
       
         std::for_each(features_values.begin(), features_values.end(),
