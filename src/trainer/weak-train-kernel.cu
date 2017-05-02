@@ -9,7 +9,10 @@ __const__ double W[FNUM] = {0.0};
 __global__ void KernelWeakTrain(int *index, int testNum) {
 	// Get our global thread ID
     int id = blockIdx.x*blockDim.x+threadIdx.x;
-
+    int startPos = id*FNUM;
+    for(int i=0; i<testNum; ++i){
+        
+    }
 
 }
 
