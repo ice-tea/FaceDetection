@@ -6,7 +6,8 @@ __global__ void KernelWeakTrain(long *pic, int width, int height) {
     int id = blockIdx.x*blockDim.x+threadIdx.x;
 }
 
-void select_best_gpu(bool * valids, double * weights, double validweight, int featureNum, int* deatureIndex){
+void select_best_gpu(bool * valids, double * weights, double validweight, int featureNum, int* deatureIndex,
+    int & index, bool & good, double & error){
 
     // Allocate memory for each vector on GPU
     /*
@@ -31,6 +32,9 @@ void select_best_gpu(bool * valids, double * weights, double validweight, int fe
     // Free device matrices
     cudaFree(d_pic);
     */
+    index = 1;
+    good = true;
+    error = validweight;
 }
 
 #endif // #ifndef _WEAK_TRAIN_H_

@@ -19,7 +19,8 @@
 #include "../features/two-horizontal-rectangles-feature.h"
 #include "../features/three-vertical-rectangles-feature.h"
 
-extern void select_best_gpu(bool * valids, double * weights, double validweight, int featureNum, int * featureIndex);
+extern void select_best_gpu(bool * valids, double * weights, double validweight, int featureNum, int * featureIndex,
+    int & index, bool & good, double & error);
 
 namespace violajones
 {
@@ -155,9 +156,9 @@ namespace violajones
     for(int i=0; i<featureNum; ++i){
       for(int j=0; j<testNum; ++j){
         featureIndexfeatures_values[i*testNum + j] = features_values[i].values_[j].test_index_;
-        std::cout<<featureIndexfeatures_values[i*testNum + j]<<" ";
+        //std::cout<<featureIndexfeatures_values[i*testNum + j]<<" ";
       }
-      std::cout<<std::endl;
+      //std::cout<<std::endl;
     }
 
     while (ipass <= Config::learn_pass)
