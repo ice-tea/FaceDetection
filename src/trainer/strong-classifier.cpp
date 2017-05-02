@@ -153,10 +153,13 @@ namespace violajones
     int featureNum = features_values.size();
     int testNum = tests.size();
     int * featureIndexfeatures_values = (int *)malloc(featureNum * testNum * sizeof(int));
+    std::cout << " Feature test index in gpu is ";
     for(int i=0; i<featureNum; ++i){
       for(int j=0; j<testNum; ++j){
         featureIndexfeatures_values[i*testNum + j] = features_values[i].values_[j].test_index_;
         //std::cout<<featureIndexfeatures_values[i*testNum + j]<<" ";
+        if(i==0)
+            std::cout<<featureIndexfeatures_values[i*testNum + j]<<" ";
       }
       //std::cout<<std::endl;
     }
@@ -217,12 +220,18 @@ namespace violajones
       //TestWeakClassifier tmp(features_values[b_index], features_values[b_index].values_[0].value_, b_good, b_error);
       //best = tmp;
       
+      FeatureValues feature1 = features_values[0];
+      std::cout << " Feature test index in cpu is ";
+      for(int i=0; i<feature1.values_.size(); ++i){
+        std::cout << feature1.values_[i] << " ";
+      }
+      std::cout<<endl;
       
         std::for_each(features_values.begin(), features_values.end(),
                       [&](FeatureValues& fv) {
                         
                         auto new_classifier = TestWeakClassifier::train(tests, validweight, fv);
-                        std::cout << " New Featrue CPU is " << new_classifier.errors_ << " errors \n";
+                        //std::cout << " New Featrue CPU is " << new_classifier.errors_ << " errors \n";
                         if (best.errors_ > new_classifier.errors_)
                           best = new_classifier;
                       });
