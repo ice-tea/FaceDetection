@@ -223,7 +223,7 @@ namespace violajones
       FeatureValues feature1 = features_values[0];
       std::cout << " Feature test index in cpu is ";
       for(int i=0; i<feature1.values_.size(); ++i){
-        std::cout << feature1.values_[i] << " ";
+        std::cout << feature1.values_[i].test_index_ << " ";
       }
       std::cout<< std::endl;
       
