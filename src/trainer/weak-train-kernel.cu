@@ -26,20 +26,27 @@ __global__ void KernelWeakTrain(int *tindex, int testNum, double validweight, in
     int pos = id*FNUM;
     for(int i=0; i<testNum; ++i){
         if (V[tindex[pos]]){
-            positive_error[pos] -= W[tindex[pos]];
+            positive_error[id] -= W[tindex[pos]];
 
-            if (positive_error[pos] < error[pos]){
+            if (positive_error[id] < error[id]){
+                error[id] = positive_error[id];
+                good[id] = true;
+                index[id] = i;
               //best = TestWeakClassifier(feature, feature.values_[itest].value_ + 1, 1, positive_error);
             }
         }
         else{
-            positive_error[pos] += W[tindex[pos]];
-            negative_error[pos]= 1.0 - positive_error[pos];
+            positive_error[id] += W[tindex[pos]];
+            negative_error[id]= 1.0 - positive_error[id];
 
-            if (negative_error[pos] < error[pos]){
+            if (negative_error[id] < error[id]){
+                error[id] = negative_error[id];
+                good[id] = false;
+                index[id] = i;
               //best = TestWeakClassifier(feature, feature.values_[itest].value_ - 1, -1, negative_error);
             }
         }
+        pos++;
     }
     indexR[id] = index[id];
     goodR[id] = good[id];
