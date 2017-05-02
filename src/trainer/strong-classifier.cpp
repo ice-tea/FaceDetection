@@ -205,7 +205,12 @@ namespace violajones
           weights[i] = tests[i].weight_;
       }
 
-      select_best_gpu(valids, weights, validweight, features_values.size(), featureIndexfeatures_values);
+      int b_index = 0;
+      bool b_good = 0;
+      double b_error = std::numeric_limits<double>::max();
+
+      select_best_gpu(valids, weights, validweight, features_values.size(), featureIndexfeatures_values,
+         b_index, b_good, b_error);
       
         std::for_each(features_values.begin(), features_values.end(),
                       [&](FeatureValues& fv) {
