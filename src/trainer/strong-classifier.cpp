@@ -214,11 +214,10 @@ namespace violajones
          b_index, b_good, b_error);
       
       std::cout <<  b_index << " with " << b_good <<" and error is "<< b_error <<std::endl;
-      TestWeakClassifier tmp(features_values[b_index], features_values[b_index].values_[0].value_, 
-          b_good, b_error);
-      best = tmp;
+      //TestWeakClassifier tmp(features_values[b_index], features_values[b_index].values_[0].value_, b_good, b_error);
+      //best = tmp;
       
-      /*
+      
         std::for_each(features_values.begin(), features_values.end(),
                       [&](FeatureValues& fv) {
                         
@@ -226,7 +225,7 @@ namespace violajones
                         if (best.errors_ > new_classifier.errors_)
                           best = new_classifier;
                         });
-      */
+      
 
       end = std::chrono::steady_clock::now();
       diff = end - start;
