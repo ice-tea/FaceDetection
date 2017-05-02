@@ -27,7 +27,7 @@ __global__ void KernelWeakTrain(int featureNum, int testNum, int *tindex,
             positive_error -= W[tindex[pos]];
 
             if (positive_error < errorR[id]){
-                errorR[id] = positive_error[id];
+                errorR[id] = positive_error;
                 goodR[id] = true;
                 indexR[id] = i;
               //best = TestWeakClassifier(feature, feature.values_[itest].value_ + 1, 1, positive_error);
