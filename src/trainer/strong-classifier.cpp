@@ -233,8 +233,14 @@ namespace violajones
       std::chrono::duration<double> GPUdiff = GPUend - GPUstart;
       TestWeakClassifier bestGPU(features_values[f_index], 
           features_values[f_index].values_[b_index].value_ + ((b_good)?1:-1), b_good, b_error);
-      
+      std::cout << "GPU New weak classifier selected in " << GPUdiff.count() << " seconds (error score : "
+      << bestGPU.errors_ << ")\n"
+      << "X: " << bestGPU.feature_.feature_->frame.top_left.x
+      << " Y: " << bestGPU.feature_.feature_->frame.top_left.y
+      << " - Width: " << bestGPU.feature_.feature_->frame.width
+      << " Height: " << bestGPU.feature_.feature_->frame.height << std::endl;
 
+      //Bo Li CPU
       auto CPUstart = std::chrono::steady_clock::now();
       std::for_each(features_values.begin(), features_values.end(),
                       [&](FeatureValues& fv) {
@@ -253,14 +259,6 @@ namespace violajones
       << " Y: " << best.feature_.feature_->frame.top_left.y
       << " - Width: " << best.feature_.feature_->frame.width
       << " Height: " << best.feature_.feature_->frame.height << std::endl;
-
-
-      std::cout << "GPU New weak classifier selected in " << GPUdiff.count() << " seconds (error score : "
-      << bestGPU.errors_ << ")\n"
-      << "X: " << bestGPU.feature_.feature_->frame.top_left.x
-      << " Y: " << bestGPU.feature_.feature_->frame.top_left.y
-      << " - Width: " << bestGPU.feature_.feature_->frame.width
-      << " Height: " << bestGPU.feature_.feature_->frame.height << std::endl;
 
       double beta = best.errors_ / (1.0 - best.errors_);
       if (beta < 1.0 / 100000000)
