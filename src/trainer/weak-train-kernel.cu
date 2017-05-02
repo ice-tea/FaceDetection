@@ -26,7 +26,7 @@ __global__ void KernelWeakTrain(int featureNum, int testNum, int *tindex,
         if (V[tindex[pos]]){
             positive_error -= W[tindex[pos]];
 
-            if (positive_error < error[id]){
+            if (positive_error < errorR[id]){
                 errorR[id] = positive_error[id];
                 goodR[id] = true;
                 indexR[id] = i;
@@ -37,7 +37,7 @@ __global__ void KernelWeakTrain(int featureNum, int testNum, int *tindex,
             positive_error += W[tindex[pos]];
             negative_error = 1.0 - positive_error;
 
-            if (negative_error < error[id]){
+            if (negative_error < errorR[id]){
                 errorR[id] = negative_error;
                 goodR[id] = false;
                 indexR[id] = i;
