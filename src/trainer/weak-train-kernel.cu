@@ -1,7 +1,6 @@
 #ifndef _WEAK_TRAIN_H_
 #define _WEAK_TRAIN_H_
 
-#include <iostream>
 #define TNUM 50
 #define FNUM 882
 
@@ -54,7 +53,7 @@ __global__ void KernelWeakTrain(int *tindex, int testNum, double validweight, in
     //errorR[id] = error[id];
 }
 void select_best_gpu(int featureNum, int testNum, bool * valids, double * weights, double validweight, int* featureIndex,
-    int & index, bool & good, double & error){
+    int * indexResult, bool * goodResult, double * errorResult){
 
     //cudaMemcpyToSymbol(V, valids, TNUM *sizeof(bool));
     //cudaMemcpyToSymbol(W, weights, TNUM *sizeof(double));
@@ -92,21 +91,9 @@ void select_best_gpu(int featureNum, int testNum, bool * valids, double * weight
     KernelWeakTrain<<<1, FNUM>>>(d_f_i, testNum, validweight, d_i, d_g, d_e, V, W);
 
     // Copy array back to host
-    int* r_i = (int*)malloc(featureNum*sizeof(int));
-    bool* r_g = (bool*)malloc(featureNum*sizeof(bool));
-    double* r_e = (double*)malloc(featureNum*sizeof(double));
-    cudaMemcpy(r_i, d_i, bytes, cudaMemcpyDeviceToHost); 
-    cudaMemcpy(r_g, d_g, bytes, cudaMemcpyDeviceToHost); 
-    cudaMemcpy(r_e, d_e, bytes, cudaMemcpyDeviceToHost);
-
-    for(int i=0; i<FNUM; ++i){
-        std::cout << i << "th training result is " << r_e[i] << " with index " << r_i[i] <<std::endl;
-        if(r_e[i] < error){
-            error = r_e[i];
-            index = r_i[i];
-            good = r_g[i];
-        }
-    }
+    cudaMemcpy(indexResult, d_i, bytes, cudaMemcpyDeviceToHost); 
+    cudaMemcpy(goodResult, d_g, bytes, cudaMemcpyDeviceToHost); 
+    cudaMemcpy(errorResult, d_e, bytes, cudaMemcpyDeviceToHost);
 
     // Free device matrices
     cudaFree(V);

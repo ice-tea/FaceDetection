@@ -211,8 +211,16 @@ namespace violajones
       bool b_good = 0;
       double b_error = std::numeric_limits<double>::max();
 
+      int* indexResult = (int*)malloc(featureNum*sizeof(int));
+      bool* goodResult = (bool*)malloc(featureNum*sizeof(bool));
+      double* errorResult = (double*)malloc(featureNum*sizeof(double));
+
       select_best_gpu(featureNum, testNum, valids, weights, validweight, featureIndexfeatures_values,
-         b_index, b_good, b_error);
+         indexResult, goodResult, errorResult);
+
+      for(int i=0; i<featureNum; ++i){
+        std::cout << i << "th training result is " << errorResult[i] << " with index " << indexResult[i] <<std::endl;
+      }
       
       std::cout <<  b_index << " with " << b_good <<" and error is "<< b_error <<std::endl;
       //TestWeakClassifier tmp(features_values[b_index], features_values[b_index].values_[0].value_, b_good, b_error);
