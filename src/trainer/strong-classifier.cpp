@@ -168,6 +168,11 @@ namespace violajones
     size_t bytesF = testNum*sizeof(double);
     double* weights = (double*)malloc(bytesF);
 
+    //Each Iteration Best
+      int* indexResult = (int*)malloc(featureNum*sizeof(int));
+      bool* goodResult = (bool*)malloc(featureNum*sizeof(bool));
+      double* errorResult = (double*)malloc(featureNum*sizeof(double));
+
     while (ipass <= Config::learn_pass)
     {
       start = std::chrono::steady_clock::now();
@@ -207,13 +212,10 @@ namespace violajones
           std::cout << valids[i] << " with "<< weights[i] << std::endl;
       }
 
-      int* indexResult = (int*)malloc(featureNum*sizeof(int));
-      bool* goodResult = (bool*)malloc(featureNum*sizeof(bool));
-      double* errorResult = (double*)malloc(featureNum*sizeof(double));
-
+      auto GPUstart = std::chrono::steady_clock::now();
       select_best_gpu(featureNum, testNum, valids, weights, validweight, featureIndexfeatures_values,
          indexResult, goodResult, errorResult);
-      
+      auto GPUend = std::chrono::steady_clock::now();
 
       int b_index = 0;
       bool b_good = 0;
@@ -228,21 +230,13 @@ namespace violajones
           f_index = i;
         }
       }
-
-      std::cout <<  b_index << " with " << b_good <<" and error is "<< b_error <<std::endl;
-      //TestWeakClassifier tmp(features_values[b_index], features_values[b_index].values_[0].value_, b_good, b_error);
-      //best = tmp;
+      auto GPUdiff = GPUend - GPUstart;
       TestWeakClassifier bestGPU(features_values[f_index], 
           features_values[f_index].values_[b_index].value_ + ((b_good)?1:-1), b_good, b_error);
       
-      FeatureValues feature1 = features_values[0];
-      std::cout << " Feature test index in cpu is ";
-      for(int i=0; i<feature1.values_.size(); ++i){
-        std::cout << feature1.values_[i].test_index_ << " ";
-      }
-      std::cout<< std::endl;
-      
-        std::for_each(features_values.begin(), features_values.end(),
+
+      auto CPUstart = std::chrono::steady_clock::now();
+      std::for_each(features_values.begin(), features_values.end(),
                       [&](FeatureValues& fv) {
                         
                         auto new_classifier = TestWeakClassifier::train(tests, validweight, fv);
@@ -250,12 +244,11 @@ namespace violajones
                         if (best.errors_ > new_classifier.errors_)
                           best = new_classifier;
                       });
-      
+      auto CPUend = std::chrono::steady_clock::now();
+      auto CPUdiff = CPUend - CPUstart;
+      auto CPUdiff = end - start;
 
-      end = std::chrono::steady_clock::now();
-      diff = end - start;
-
-      std::cout << "New weak classifier selected in " << diff.count() << " seconds (error score : "
+      std::cout << "CPU New weak classifier selected in " << CPUdiff.count() << " seconds (error score : "
       << best.errors_ << ")\n"
       << "X: " << best.feature_.feature_->frame.top_left.x
       << " Y: " << best.feature_.feature_->frame.top_left.y
@@ -263,7 +256,7 @@ namespace violajones
       << " Height: " << best.feature_.feature_->frame.height << std::endl;
 
 
-      std::cout << "GPU New weak classifier selected in " << diff.count() << " seconds (error score : "
+      std::cout << "GPU New weak classifier selected in " << GPUdiff.count() << " seconds (error score : "
       << bestGPU.errors_ << ")\n"
       << "X: " << bestGPU.feature_.feature_->frame.top_left.x
       << " Y: " << bestGPU.feature_.feature_->frame.top_left.y
@@ -285,6 +278,9 @@ namespace violajones
 
     free(valids);
     free(weights);
+    free(indexResult);
+    free(goodResult);
+    free(errorResult);
     auto global_end = std::chrono::steady_clock::now();
     diff = global_end - global_start;
     std::cout << "Training finished in " << diff.count()
