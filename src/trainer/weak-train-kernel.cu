@@ -3,6 +3,7 @@
 
 #define TNUM 6987
 #define FNUM 882
+#define TNUM 96
 
 __constant__ bool V[TNUM];
 __constant__ double W[TNUM];
@@ -85,7 +86,8 @@ void select_best_gpu(int featureNum, int testNum, bool * valids, double * weight
     cudaMalloc(&d_i, featureNum *sizeof(int));
     cudaMalloc(&d_g, featureNum *sizeof(bool));
     cudaMalloc(&d_e, featureNum *sizeof(double));
-    KernelWeakTrain<<<1, featureNum>>> (featureNum, testNum, d_f_i, validweight, d_i, d_g, d_e /*,V, W*/);
+
+    KernelWeakTrain<<<(featureNum-1)/TNUM + 1, TNUM>>> (featureNum, testNum, d_f_i, validweight, d_i, d_g, d_e /*,V, W*/);
 
     // Copy array back to host
     cudaMemcpy(indexResult, d_i, featureNum *sizeof(int), cudaMemcpyDeviceToHost); 
