@@ -14,10 +14,6 @@ __global__ void KernelWeakTrain(int featureNum, int testNum, int *tindex,
     // Get our global thread ID
     int id = blockIdx.x*blockDim.x+threadIdx.x;
 
-    indexR[id] = 0;
-    goodR[id] = true;
-    errorR[id] = 2e20;
-
     double positive_error = validweight;
     double negative_error = validweight;
 
@@ -28,6 +24,9 @@ __global__ void KernelWeakTrain(int featureNum, int testNum, int *tindex,
     int pos = id*testNum;
     
     if(id < featureNum){
+        indexR[id] = 0;
+        goodR[id] = true;
+        errorR[id] = 2e20;
         for(int i=0; i<testNum; ++i){
             if (V[tindex[pos]]){
                 positive_error -= W[tindex[pos]];
