@@ -212,7 +212,7 @@ namespace violajones
       select_best_gpu(featureNum, testNum, valids, weights, validweight, featureIndexfeatures_values,
          b_index, b_good, b_error);
       
-      std::cout <<  b_index << " with "b_good <<" and error is "<< b_error <<std::endl;
+      std::cout <<  b_index << " with " << b_good <<" and error is "<< b_error <<std::endl;
       TestWeakClassifier tmp(features_values[b_index], features_values[b_index].values_[0].value_, 
           b_good, b_error);
       best = tmp;
