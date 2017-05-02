@@ -3,8 +3,8 @@
 
 #define FNUM 882
 
-__const__ bool V[FNUM];
-__const__ double W[FNUM];
+__const__ bool V[FNUM] = {false};
+__const__ double W[FNUM] = {0.0};
 
 __global__ void KernelWeakTrain(int *index, int testNum) {
 	// Get our global thread ID
@@ -16,8 +16,6 @@ __global__ void KernelWeakTrain(int *index, int testNum) {
 void select_best_gpu(int featureNum, int testNum, bool * valids, double * weights, double validweight, int* featureIndex,
     int & index, bool & good, double & error){
 
-    bool * V;
-    double * W;
     cudaMemcpyToSymbol(V, valids, FNUM *sizeof(bool));
     cudaMemcpyToSymbol(W, weights, FNUM *sizeof(double));
 
