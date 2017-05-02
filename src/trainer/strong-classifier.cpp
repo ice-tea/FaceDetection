@@ -222,7 +222,7 @@ namespace violajones
                       [&](FeatureValues& fv) {
                         
                         auto new_classifier = TestWeakClassifier::train(tests, validweight, fv);
-                        std::cout << " New Featrue CPU is " << new_classifier.errors_() << " errors \n";
+                        std::cout << " New Featrue CPU is " << new_classifier.errors_ << " errors \n";
                         if (best.errors_ > new_classifier.errors_)
                           best = new_classifier;
                       });
