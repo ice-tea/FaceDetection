@@ -9,47 +9,6 @@
 __const__ bool V[FNUM] = {false};
 __const__ double W[FNUM] = {0.0};
 
-__global__ void KernelWeakTrain(int *tindex, int testNum, double validweight, int* indexR, bool* goodR, double* errorR) {
-	// Get our global thread ID
-    int id = blockIdx.x*blockDim.x+threadIdx.x;
-    __shared__ int index[FNUM];
-    __shared__ bool good[FNUM];
-    __shared__ double error[FNUM];
-    __shared__ double positive_error[FNUM];
-    __shared__ double negative_error[FNUM];
-
-    extern __const__ bool V[FNUM];
-    extern __const__ double W[FNUM];
-
-    index[id] = 0;
-    good[id] = true;
-    error[id] = 1e20;
-    positive_error[id] = validweight;
-    negative_error[id] = validweight;
-
-    int pos = id*FNUM;
-    for(int i=0; i<testNum; ++i){
-        if (V[tindex[pos]]){
-            positive_error[pos] -= W[tindex[pos]];
-
-            if (positive_error[pos] < error[pos]){
-              //best = TestWeakClassifier(feature, feature.values_[itest].value_ + 1, 1, positive_error);
-            }
-        }
-        else{
-            positive_error[pos] += W[tindex[pos]];
-            negative_error[pos]= 1.0 - positive_error[pos];
-
-            if (negative_error[pos] < error[pos]){
-              //best = TestWeakClassifier(feature, feature.values_[itest].value_ - 1, -1, negative_error);
-            }
-        }
-    }
-    indexR[id] = index[id];
-    goodR[id] = good[id];
-    errorR[id] = error[id];
-}
-
 void select_best_gpu(int featureNum, int testNum, bool * valids, double * weights, double validweight, int* featureIndex,
     int & index, bool & good, double & error){
 
@@ -87,6 +46,44 @@ void select_best_gpu(int featureNum, int testNum, bool * valids, double * weight
 
     // Free device matrices
     cudaFree(d_f_i);
+}
+
+__global__ void KernelWeakTrain(int *tindex, int testNum, double validweight, int* indexR, bool* goodR, double* errorR) {
+	// Get our global thread ID
+    int id = blockIdx.x*blockDim.x+threadIdx.x;
+    __shared__ int index[FNUM];
+    __shared__ bool good[FNUM];
+    __shared__ double error[FNUM];
+    __shared__ double positive_error[FNUM];
+    __shared__ double negative_error[FNUM];
+
+    index[id] = 0;
+    good[id] = true;
+    error[id] = 1e20;
+    positive_error[id] = validweight;
+    negative_error[id] = validweight;
+
+    int pos = id*FNUM;
+    for(int i=0; i<testNum; ++i){
+        if (V[tindex[pos]]){
+            positive_error[pos] -= W[tindex[pos]];
+
+            if (positive_error[pos] < error[pos]){
+              //best = TestWeakClassifier(feature, feature.values_[itest].value_ + 1, 1, positive_error);
+            }
+        }
+        else{
+            positive_error[pos] += W[tindex[pos]];
+            negative_error[pos]= 1.0 - positive_error[pos];
+
+            if (negative_error[pos] < error[pos]){
+              //best = TestWeakClassifier(feature, feature.values_[itest].value_ - 1, -1, negative_error);
+            }
+        }
+    }
+    indexR[id] = index[id];
+    goodR[id] = good[id];
+    errorR[id] = error[id];
 }
 
 #endif // #ifndef _WEAK_TRAIN_H_
