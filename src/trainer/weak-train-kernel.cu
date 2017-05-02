@@ -30,7 +30,7 @@ __global__ void KernelWeakTrain(int featureNum, int testNum, int *tindex,
         if (V[tindex[pos]]){
             positive_error -= W[tindex[pos]];
 
-            if (positive_error < errorR[id]){
+            if (positive_error < local_best){
                 local_best = positive_error;
                 loca_good = true;
                 local_index = i;
@@ -41,7 +41,7 @@ __global__ void KernelWeakTrain(int featureNum, int testNum, int *tindex,
             positive_error += W[tindex[pos]];
             negative_error = 1.0 - positive_error;
 
-            if (negative_error < errorR[id]){
+            if (negative_error < local_best){
                 //errorR[id] = negative_error;
                 //goodR[id] = false;
                 //indexR[id] = i;
