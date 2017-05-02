@@ -3,7 +3,7 @@
 
 #define TNUM 6987
 #define FNUM 882
-#define TNUM 96
+#define THREADNUM 96
 
 __constant__ bool V[TNUM];
 __constant__ double W[TNUM];
@@ -12,51 +12,55 @@ __global__ void KernelWeakTrain(int featureNum, int testNum, int *tindex,
     double validweight, int* indexR, bool* goodR, double* errorR
     /*, bool * V, double * W*/) {
     // Get our global thread ID
-    int id = blockIdx.x*blockDim.x+threadIdx.x;    
-    if(id < featureNum){
-        double positive_error = validweight;
-        double negative_error = validweight;
+    int id = blockIdx.x*blockDim.x+threadIdx.x;
 
-        double local_best = validweight;
-        bool loca_good = true;
-        int local_index = 0;
-        
-        int pos = id*testNum;
-        indexR[id] = 0;
-        goodR[id] = true;
-        errorR[id] = 2e20;
-        for(int i=0; i<testNum; ++i){
-            if (V[tindex[pos]]){
-                positive_error -= W[tindex[pos]];
+    if(id > = THREADNUM)
+        return;
 
-                if (positive_error < local_best){
-                    local_best = positive_error;
-                    loca_good = true;
-                    local_index = i;
-                  //best = TestWeakClassifier(feature, feature.values_[itest].value_ + 1, 1, positive_error);
-                }
+    indexR[id] = 0;
+    goodR[id] = true;
+    errorR[id] = 2e20;
+
+    double positive_error = validweight;
+    double negative_error = validweight;
+
+    double local_best = validweight;
+    bool loca_good = true;
+    int local_index = 0;
+
+    int pos = id*testNum;
+    
+    for(int i=0; i<testNum; ++i){
+        if (V[tindex[pos]]){
+            positive_error -= W[tindex[pos]];
+
+            if (positive_error < local_best){
+                local_best = positive_error;
+                loca_good = true;
+                local_index = i;
+              //best = TestWeakClassifier(feature, feature.values_[itest].value_ + 1, 1, positive_error);
             }
-            else{
-                positive_error += W[tindex[pos]];
-                negative_error = 1.0 - positive_error;
-
-                if (negative_error < local_best){
-                    //errorR[id] = negative_error;
-                    //goodR[id] = false;
-                    //indexR[id] = i;
-                    local_best = negative_error;
-                    loca_good = false;
-                    local_index = i;
-                  //best = TestWeakClassifier(feature, feature.values_[itest].value_ - 1, -1, negative_error);
-                }
-            }
-            pos++;
         }
-        
-        indexR[id] = local_index;
-        goodR[id] = loca_good;
-        errorR[id] = local_best;
+        else{
+            positive_error += W[tindex[pos]];
+            negative_error = 1.0 - positive_error;
+
+            if (negative_error < local_best){
+                //errorR[id] = negative_error;
+                //goodR[id] = false;
+                //indexR[id] = i;
+                local_best = negative_error;
+                loca_good = false;
+                local_index = i;
+              //best = TestWeakClassifier(feature, feature.values_[itest].value_ - 1, -1, negative_error);
+            }
+        }
+        pos++;
     }
+    
+    indexR[id] = local_index;
+    goodR[id] = loca_good;
+    errorR[id] = local_best;
 }
 void select_best_gpu(int featureNum, int testNum, bool * valids, double * weights, double validweight, int* featureIndex,
     int * indexResult, bool * goodResult, double * errorResult){
@@ -86,7 +90,7 @@ void select_best_gpu(int featureNum, int testNum, bool * valids, double * weight
     cudaMalloc(&d_g, featureNum *sizeof(bool));
     cudaMalloc(&d_e, featureNum *sizeof(double));
 
-    KernelWeakTrain<<<(featureNum-1)/TNUM + 1, TNUM>>> (featureNum, testNum, d_f_i, validweight, d_i, d_g, d_e /*,V, W*/);
+    KernelWeakTrain<<<(featureNum-1)/THREADNUM + 1, THREADNUM>>> (featureNum, testNum, d_f_i, validweight, d_i, d_g, d_e /*,V, W*/);
 
     // Copy array back to host
     cudaMemcpy(indexResult, d_i, featureNum *sizeof(int), cudaMemcpyDeviceToHost); 
