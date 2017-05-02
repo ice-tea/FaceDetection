@@ -9,6 +9,9 @@
 __const__ bool V[FNUM] = {false};
 __const__ double W[FNUM] = {0.0};
 
+void select_best_gpu(int featureNum, int testNum, bool * valids, double * weights, double validweight, int * featureIndex,
+    int & index, bool & good, double & error);
+
 void select_best_gpu(int featureNum, int testNum, bool * valids, double * weights, double validweight, int* featureIndex,
     int & index, bool & good, double & error){
 
