@@ -2,6 +2,8 @@
 #define _WEAK_TRAIN_H_
 
 #include <numeric>
+#include <limits>
+#include <iostream>
 #define FNUM 882
 
 __const__ bool V[FNUM] = {false};
