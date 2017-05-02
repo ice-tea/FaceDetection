@@ -158,8 +158,6 @@ namespace violajones
       for(int j=0; j<testNum; ++j){
         featureIndexfeatures_values[i*testNum + j] = features_values[i].values_[j].test_index_;
         //std::cout<<featureIndexfeatures_values[i*testNum + j]<<" ";
-        if(i==0)
-            std::cout<<featureIndexfeatures_values[i*testNum + j]<<" ";
       }
       //std::cout<<std::endl;
     }

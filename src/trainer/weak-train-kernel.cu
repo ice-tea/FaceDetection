@@ -1,6 +1,7 @@
 #ifndef _WEAK_TRAIN_H_
 #define _WEAK_TRAIN_H_
 
+#include <iostream>
 #define TNUM 50
 #define FNUM 882
 
@@ -66,6 +67,12 @@ void select_best_gpu(int featureNum, int testNum, bool * valids, double * weight
     // Copy host vectors to device
     cudaMemcpy(d_f_i, featureIndex, bytes, cudaMemcpyHostToDevice);
 
+    std::cout << " Feature test index on device is ";
+    for(int i=0; i<TNUM; ++i){
+        std::cout << d_f_i[i]<< " ";
+    }
+    std::cout << std::endl;
+
     //constant
     bool * V;
     cudaMalloc(&V, TNUM*sizeof(bool));
@@ -93,6 +100,7 @@ void select_best_gpu(int featureNum, int testNum, bool * valids, double * weight
     cudaMemcpy(r_e, d_e, bytes, cudaMemcpyDeviceToHost);
 
     for(int i=0; i<FNUM; ++i){
+        std::cout << i << "th training result is " << r_e[i] << " with index " << r_i[i] <<std::endl;
         if(r_e[i] < error){
             error = r_e[i];
             index = r_i[i];
