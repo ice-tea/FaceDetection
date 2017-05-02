@@ -7,7 +7,7 @@
 __const__ bool V[FNUM] = {false};
 __const__ double W[FNUM] = {0.0};
 
-__global__ void KernelWeakTrain(int *index, int testNum, double validweight, int* indexR, bool* goodR, double* errorR) {
+__global__ void KernelWeakTrain(int *tindex, int testNum, double validweight, int* indexR, bool* goodR, double* errorR) {
 	// Get our global thread ID
     int id = blockIdx.x*blockDim.x+threadIdx.x;
     __shared__ int index[FNUM];
@@ -23,15 +23,15 @@ __global__ void KernelWeakTrain(int *index, int testNum, double validweight, int
 
     int pos = id*FNUM;
     for(int i=0; i<testNum; ++i){
-        if (V[index[pos]]){
-            positive_error[pos] -= W[index[pos]];
+        if (V[tindex[pos]]){
+            positive_error[pos] -= W[tindex[pos]];
 
             if (positive_error[pos] < error[pos]){
               //best = TestWeakClassifier(feature, feature.values_[itest].value_ + 1, 1, positive_error);
             }
         }
         else{
-            positive_error[pos] += W[index[pos]];
+            positive_error[pos] += W[tindex[pos]];
             negative_error[pos]= 1.0 - positive_error[pos];
 
             if (negative_error[pos] < error[pos]){
