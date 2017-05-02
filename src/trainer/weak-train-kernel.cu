@@ -21,7 +21,7 @@ __global__ void KernelWeakTrain(int *tindex, int testNum, double validweight, in
 
     index[id] = 0;
     good[id] = true;
-    error[id] = std::numeric_limits<double>::max();
+    error[id] = 1e20;
     positive_error[id] = validweight;
     negative_error[id] = validweight;
 
@@ -44,8 +44,8 @@ __global__ void KernelWeakTrain(int *tindex, int testNum, double validweight, in
         }
     }
     indexR[id] = index[id];
-    goodR[id] = good[id]
-    errorR[id] = errorR[id];
+    goodR[id] = good[id];
+    errorR[id] = error[id];
 }
 
 void select_best_gpu(int featureNum, int testNum, bool * valids, double * weights, double validweight, int* featureIndex,
