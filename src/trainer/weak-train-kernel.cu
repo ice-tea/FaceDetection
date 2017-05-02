@@ -19,11 +19,11 @@ __global__ void KernelWeakTrain(int *tindex, int testNum, double validweight, in
 
     index[id] = 0;
     good[id] = true;
-    error[id] = 1e20;
+    error[id] = 2e20;
     positive_error[id] = validweight;
     negative_error[id] = validweight;
 
-    int pos = id*FNUM;
+    int pos = id*TNUM;
     for(int i=0; i<testNum; ++i){
         if (V[tindex[pos]]){
             positive_error[id] -= W[tindex[pos]];
