@@ -203,6 +203,7 @@ namespace violajones
       for(int i=0; i<testNum; ++i){
           valids[i] = tests[i].valid_;
           weights[i] = tests[i].weight_;
+          std::cout << valids[i] << " with "<< weights[i] << std::endl;
       }
 
       int b_index = 0;
