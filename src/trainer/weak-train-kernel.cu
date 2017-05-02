@@ -30,8 +30,6 @@ void select_best_gpu(int featureNum, int testNum, bool * valids, double * weight
     // Launch the device computation threads!
     KernelWeakTrain<<<1, FNUM>>>(d_f_i, testNum);
 
-    // Copy array back to host
-    cudaMemcpy(h_i, d_pic, bytes, cudaMemcpyDeviceToHost);
     index = 1;
     good = true;
     error = validweight;
