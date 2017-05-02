@@ -207,10 +207,6 @@ namespace violajones
           std::cout << valids[i] << " with "<< weights[i] << std::endl;
       }
 
-      int b_index = 0;
-      bool b_good = 0;
-      double b_error = std::numeric_limits<double>::max();
-
       int* indexResult = (int*)malloc(featureNum*sizeof(int));
       bool* goodResult = (bool*)malloc(featureNum*sizeof(bool));
       double* errorResult = (double*)malloc(featureNum*sizeof(double));
@@ -218,13 +214,26 @@ namespace violajones
       select_best_gpu(featureNum, testNum, valids, weights, validweight, featureIndexfeatures_values,
          indexResult, goodResult, errorResult);
       
-      for(int i=0; i<featureNum; ++i){
+
+      int b_index = 0;
+      bool b_good = 0;
+      double b_error = std::numeric_limits<double>::max();
+      int f_index = 0;
+      for(int i=0; i<featureNum; ++i) {
         std::cout << i << "th training result is " << errorResult[i] << " with index " << indexResult[i] <<std::endl;
+        if(errorResult[i] < b_error){
+          b_error = errorResult[i];
+          b_good = goodResult[i];
+          b_index = indexResult[i];
+          f_index = i;
+        }
       }
 
       std::cout <<  b_index << " with " << b_good <<" and error is "<< b_error <<std::endl;
       //TestWeakClassifier tmp(features_values[b_index], features_values[b_index].values_[0].value_, b_good, b_error);
       //best = tmp;
+      TestWeakClassifier bestGPU(features_values[f_index], 
+          feature.values_[b_index].value_ + ((b_good)?1:-1), b_good, b_error);
       
       FeatureValues feature1 = features_values[0];
       std::cout << " Feature test index in cpu is ";
@@ -252,6 +261,14 @@ namespace violajones
       << " Y: " << best.feature_.feature_->frame.top_left.y
       << " - Width: " << best.feature_.feature_->frame.width
       << " Height: " << best.feature_.feature_->frame.height << std::endl;
+
+
+      std::cout << "GPU New weak classifier selected in " << diff.count() << " seconds (error score : "
+      << bestGPU.errors_ << ")\n"
+      << "X: " << bestGPU.feature_.feature_->frame.top_left.x
+      << " Y: " << bestGPU.feature_.feature_->frame.top_left.y
+      << " - Width: " << bestGPU.feature_.feature_->frame.width
+      << " Height: " << bestGPU.feature_.feature_->frame.height << std::endl;
 
       double beta = best.errors_ / (1.0 - best.errors_);
       if (beta < 1.0 / 100000000)
