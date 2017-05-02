@@ -3,8 +3,8 @@
 
 #define FNUM 882
 
-__const__ bool V[FNUM]
-__const__ double W[FNUM]
+__const__ bool V[FNUM];
+__const__ double W[FNUM];
 
 __global__ void KernelWeakTrain(int *index, int testNum) {
 	// Get our global thread ID
