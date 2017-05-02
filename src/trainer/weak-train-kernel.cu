@@ -58,12 +58,8 @@ void select_best_gpu(int featureNum, int testNum, bool * valids, double * weight
     //cudaMemcpyToSymbol(W, weights, TNUM *sizeof(double));
 
     int * d_f_i;
-    size_t bytes = featureNum  * testNum * sizeof( int );
-    // Allocate memory for each vector on GPU
-    cudaMalloc(&d_f_i, bytes);   
- 
-    // Copy host vectors to device
-    cudaMemcpy(d_f_i, featureIndex, bytes, cudaMemcpyHostToDevice);
+    cudaMalloc(&d_f_i, featureNum  * testNum * sizeof( int ));
+    cudaMemcpy(d_f_i, featureIndex, featureNum  * testNum * sizeof( int ), cudaMemcpyHostToDevice);
 
     //constant
     bool * V;
@@ -84,9 +80,9 @@ void select_best_gpu(int featureNum, int testNum, bool * valids, double * weight
     KernelWeakTrain<<<1, featureNum>>> (featureNum, testNum, d_f_i, validweight, d_i, d_g, d_e, V, W);
 
     // Copy array back to host
-    cudaMemcpy(indexResult, d_i, bytes, cudaMemcpyDeviceToHost); 
-    cudaMemcpy(goodResult, d_g, bytes, cudaMemcpyDeviceToHost); 
-    cudaMemcpy(errorResult, d_e, bytes, cudaMemcpyDeviceToHost);
+    cudaMemcpy(indexResult, d_i, featureNum *sizeof(int), cudaMemcpyDeviceToHost); 
+    cudaMemcpy(goodResult, d_g, featureNum *sizeof(bool), cudaMemcpyDeviceToHost); 
+    cudaMemcpy(errorResult, d_e, featureNum *sizeof(double), cudaMemcpyDeviceToHost);
 
     // Free device matrices
     cudaFree(V);
