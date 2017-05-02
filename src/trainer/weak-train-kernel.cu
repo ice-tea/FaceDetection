@@ -1,57 +1,13 @@
 #ifndef _WEAK_TRAIN_H_
 #define _WEAK_TRAIN_H_
 
-#include <numeric>
-#include <limits>
-#include <iostream>
-#define FNUM 882
+#define TNUM 6987
 
-__const__ bool V[FNUM] = {false};
-__const__ double W[FNUM] = {0.0};
-
-__global__ void KernelWeakTrain(int *tindex, int testNum, double validweight, int* indexR, bool* goodR, double* errorR);
-
-void select_best_gpu(int featureNum, int testNum, bool * valids, double * weights, double validweight, int* featureIndex,
-    int & index, bool & good, double & error){
-
-    cudaMemcpyToSymbol(V, valids, FNUM *sizeof(bool));
-    cudaMemcpyToSymbol(W, weights, FNUM *sizeof(double));
-
-    int * d_f_i;
-    size_t bytes = featureNum  * testNum * sizeof( int );
-    // Allocate memory for each vector on GPU
-    cudaMalloc(&d_f_i, bytes);   
- 
-    // Copy host vectors to device
-    cudaMemcpy(d_f_i, featureIndex, bytes, cudaMemcpyHostToDevice);
-
-    // Launch the device computation threads!
-    int * d_i;
-    bool * d_g;
-    double * d_e;
-    cudaMalloc(&d_i, featureNum*sizeof(int));
-    cudaMalloc(&d_g, featureNum*sizeof(bool));
-    cudaMalloc(&d_e, featureNum*sizeof(double));
-    KernelWeakTrain<<<1, FNUM>>>(d_f_i, testNum, validweight, d_i, d_g, d_e);
-
-    // Copy array back to host
-    int* r_i = (int*)malloc(featureNum*sizeof(int));
-    bool* r_g = (bool*)malloc(featureNum*sizeof(bool));
-    double* r_e = (double*)malloc(featureNum*sizeof(double));
-    cudaMemcpy(r_i, d_i, bytes, cudaMemcpyDeviceToHost); 
-    cudaMemcpy(r_g, d_g, bytes, cudaMemcpyDeviceToHost); 
-    cudaMemcpy(r_e, d_e, bytes, cudaMemcpyDeviceToHost); 
-
-    index = 1;
-    good = true;
-    error = validweight;
-
-    // Free device matrices
-    cudaFree(d_f_i);
-}
+__const__ bool V[TNUM] = {false};
+__const__ double W[TNUM] = {0.0};
 
 __global__ void KernelWeakTrain(int *tindex, int testNum, double validweight, int* indexR, bool* goodR, double* errorR) {
-	// Get our global thread ID
+    // Get our global thread ID
     int id = blockIdx.x*blockDim.x+threadIdx.x;
     __shared__ int index[FNUM];
     __shared__ bool good[FNUM];
@@ -87,5 +43,42 @@ __global__ void KernelWeakTrain(int *tindex, int testNum, double validweight, in
     goodR[id] = good[id];
     errorR[id] = error[id];
 }
+void select_best_gpu(int featureNum, int testNum, bool * valids, double * weights, double validweight, int* featureIndex,
+    int & index, bool & good, double & error){
 
+    cudaMemcpyToSymbol(V, valids, TNUM *sizeof(bool));
+    cudaMemcpyToSymbol(W, weights, TNUM *sizeof(double));
+
+    int * d_f_i;
+    size_t bytes = featureNum  * testNum * sizeof( int );
+    // Allocate memory for each vector on GPU
+    cudaMalloc(&d_f_i, bytes);   
+ 
+    // Copy host vectors to device
+    cudaMemcpy(d_f_i, featureIndex, bytes, cudaMemcpyHostToDevice);
+
+    // Launch the device computation threads!
+    int * d_i;
+    bool * d_g;
+    double * d_e;
+    cudaMalloc(&d_i, featureNum*sizeof(int));
+    cudaMalloc(&d_g, featureNum*sizeof(bool));
+    cudaMalloc(&d_e, featureNum*sizeof(double));
+    KernelWeakTrain<<<1, FNUM>>>(d_f_i, testNum, validweight, d_i, d_g, d_e);
+
+    // Copy array back to host
+    int* r_i = (int*)malloc(featureNum*sizeof(int));
+    bool* r_g = (bool*)malloc(featureNum*sizeof(bool));
+    double* r_e = (double*)malloc(featureNum*sizeof(double));
+    cudaMemcpy(r_i, d_i, bytes, cudaMemcpyDeviceToHost); 
+    cudaMemcpy(r_g, d_g, bytes, cudaMemcpyDeviceToHost); 
+    cudaMemcpy(r_e, d_e, bytes, cudaMemcpyDeviceToHost); 
+
+    index = 1;
+    good = true;
+    error = validweight;
+
+    // Free device matrices
+    cudaFree(d_f_i);
+}
 #endif // #ifndef _WEAK_TRAIN_H_
