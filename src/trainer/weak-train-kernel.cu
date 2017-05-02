@@ -2,6 +2,7 @@
 #define _WEAK_TRAIN_H_
 
 #define TNUM 6987
+#define FNUM 882
 
 __const__ bool V[TNUM] = {false};
 __const__ double W[TNUM] = {0.0};
