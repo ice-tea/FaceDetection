@@ -48,8 +48,8 @@ __global__ void KernelWeakTrain(int *tindex, int testNum, double validweight, in
 void select_best_gpu(int featureNum, int testNum, bool * valids, double * weights, double validweight, int* featureIndex,
     int & index, bool & good, double & error){
 
-    cudaMemcpyToSymbol(V, valids, TNUM *sizeof(bool));
-    cudaMemcpyToSymbol(W, weights, TNUM *sizeof(double));
+    //cudaMemcpyToSymbol(V, valids, TNUM *sizeof(bool));
+    //cudaMemcpyToSymbol(W, weights, TNUM *sizeof(double));
 
     int * d_f_i;
     size_t bytes = featureNum  * testNum * sizeof( int );
