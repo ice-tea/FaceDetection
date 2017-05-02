@@ -1,6 +1,8 @@
 #ifndef _WEAK_TRAIN_H_
 #define _WEAK_TRAIN_H_
 
+#include <iostream>
+
 #define TNUM 50
 #define FNUM 882
 
