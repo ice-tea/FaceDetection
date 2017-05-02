@@ -4,10 +4,11 @@
 #define TNUM 6987
 #define FNUM 882
 
-__const__ bool V[TNUM] = {false};
-__const__ double W[TNUM] = {0.0};
+//__const__ bool V[TNUM] = {false};
+//__const__ double W[TNUM] = {0.0};
 
-__global__ void KernelWeakTrain(int *tindex, int testNum, double validweight, int* indexR, bool* goodR, double* errorR) {
+__global__ void KernelWeakTrain(int *tindex, int testNum, double validweight, int* indexR, bool* goodR, double* errorR,
+        bool * V, double * M) {
     // Get our global thread ID
     int id = blockIdx.x*blockDim.x+threadIdx.x;
     __shared__ int index[FNUM];
@@ -58,6 +59,15 @@ void select_best_gpu(int featureNum, int testNum, bool * valids, double * weight
     // Copy host vectors to device
     cudaMemcpy(d_f_i, featureIndex, bytes, cudaMemcpyHostToDevice);
 
+    //constant
+    bool * V;
+    cudaMalloc(&V, TNUM*sizeof(bool));
+    cudaMemcpy(V, valids, TNUM*sizeof(bool), cudaMemcpyHostToDevice);
+    double * W;
+    cudaMalloc(&W, TNUM*sizeof(double));
+    cudaMemcpy(W, weights, TNUM*sizeof(double), cudaMemcpyHostToDevice);
+
+
     // Launch the device computation threads!
     int * d_i;
     bool * d_g;
@@ -65,7 +75,7 @@ void select_best_gpu(int featureNum, int testNum, bool * valids, double * weight
     cudaMalloc(&d_i, featureNum*sizeof(int));
     cudaMalloc(&d_g, featureNum*sizeof(bool));
     cudaMalloc(&d_e, featureNum*sizeof(double));
-    KernelWeakTrain<<<1, FNUM>>>(d_f_i, testNum, validweight, d_i, d_g, d_e);
+    KernelWeakTrain<<<1, FNUM>>>(d_f_i, testNum, validweight, d_i, d_g, d_e, V, W);
 
     // Copy array back to host
     int* r_i = (int*)malloc(featureNum*sizeof(int));
