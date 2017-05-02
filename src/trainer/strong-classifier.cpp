@@ -225,7 +225,7 @@ namespace violajones
       for(int i=0; i<feature1.values_.size(); ++i){
         std::cout << feature1.values_[i] << " ";
       }
-      std::cout<<endl;
+      std::cout<< std::endl;
       
         std::for_each(features_values.begin(), features_values.end(),
                       [&](FeatureValues& fv) {
