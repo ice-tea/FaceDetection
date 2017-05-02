@@ -20,6 +20,10 @@ __global__ void KernelWeakTrain(int featureNum, int testNum, int *tindex,
     double positive_error = validweight;
     double negative_error = validweight;
 
+    double local_best = validweight;
+    bool loca_good = true;
+    int local_index = 0;
+
     int pos = id*testNum;
     
     for(int i=0; i<testNum; ++i){
@@ -27,9 +31,9 @@ __global__ void KernelWeakTrain(int featureNum, int testNum, int *tindex,
             positive_error -= W[tindex[pos]];
 
             if (positive_error < errorR[id]){
-                errorR[id] = positive_error;
-                goodR[id] = true;
-                indexR[id] = i;
+                local_best = positive_error;
+                loca_good = true;
+                local_index = i;
               //best = TestWeakClassifier(feature, feature.values_[itest].value_ + 1, 1, positive_error);
             }
         }
@@ -38,18 +42,21 @@ __global__ void KernelWeakTrain(int featureNum, int testNum, int *tindex,
             negative_error = 1.0 - positive_error;
 
             if (negative_error < errorR[id]){
-                errorR[id] = negative_error;
-                goodR[id] = false;
-                indexR[id] = i;
+                //errorR[id] = negative_error;
+                //goodR[id] = false;
+                //indexR[id] = i;
+                ocal_best = negative_error;
+                loca_good = false;
+                local_index = i;
               //best = TestWeakClassifier(feature, feature.values_[itest].value_ - 1, -1, negative_error);
             }
         }
         pos++;
     }
     
-    //indexR[id] = index[id];
-    //goodR[id] = good[id];
-    //errorR[id] = error[id];
+    indexR[id] = local_best;
+    goodR[id] = loca_good;
+    errorR[id] = local_index;
 }
 void select_best_gpu(int featureNum, int testNum, bool * valids, double * weights, double validweight, int* featureIndex,
     int * indexResult, bool * goodResult, double * errorResult){
