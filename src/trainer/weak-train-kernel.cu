@@ -29,9 +29,9 @@ __global__ void KernelWeakTrain(int *tindex, int testNum, double validweight, in
             positive_error[id] -= W[tindex[pos]];
 
             if (positive_error[id] < error[id]){
-                error[id] = positive_error[id];
-                good[id] = true;
-                index[id] = i;
+                errorR[id] = positive_error[id];
+                goodR[id] = true;
+                indexR[id] = i;
               //best = TestWeakClassifier(feature, feature.values_[itest].value_ + 1, 1, positive_error);
             }
         }
@@ -40,17 +40,17 @@ __global__ void KernelWeakTrain(int *tindex, int testNum, double validweight, in
             negative_error[id]= 1.0 - positive_error[id];
 
             if (negative_error[id] < error[id]){
-                error[id] = negative_error[id];
-                good[id] = false;
-                index[id] = i;
+                errorR[id] = negative_error[id];
+                goodR[id] = false;
+                indexR[id] = i;
               //best = TestWeakClassifier(feature, feature.values_[itest].value_ - 1, -1, negative_error);
             }
         }
         pos++;
     }
-    indexR[id] = index[id];
-    goodR[id] = good[id];
-    errorR[id] = error[id];
+    //indexR[id] = index[id];
+    //goodR[id] = good[id];
+    //errorR[id] = error[id];
 }
 void select_best_gpu(int featureNum, int testNum, bool * valids, double * weights, double validweight, int* featureIndex,
     int & index, bool & good, double & error){
