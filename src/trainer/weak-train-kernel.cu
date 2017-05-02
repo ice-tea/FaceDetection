@@ -18,8 +18,8 @@ __global__ void KernelWeakTrain(int *tindex, int testNum, double validweight, in
     __shared__ double positive_error[FNUM];
     __shared__ double negative_error[FNUM];
 
-    extern bool V[FNUM];
-    extern double W[FNUM];
+    extern __const__ bool V[FNUM];
+    extern __const__ double W[FNUM];
 
     index[id] = 0;
     good[id] = true;
