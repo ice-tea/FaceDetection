@@ -27,37 +27,39 @@ __global__ void KernelWeakTrain(int featureNum, int testNum, int *tindex,
 
     int pos = id*testNum;
     
-    for(int i=0; i<testNum; ++i){
-        if (V[tindex[pos]]){
-            positive_error -= W[tindex[pos]];
+    if(id < featureNum){
+        for(int i=0; i<testNum; ++i){
+            if (V[tindex[pos]]){
+                positive_error -= W[tindex[pos]];
 
-            if (positive_error < local_best){
-                local_best = positive_error;
-                loca_good = true;
-                local_index = i;
-              //best = TestWeakClassifier(feature, feature.values_[itest].value_ + 1, 1, positive_error);
+                if (positive_error < local_best){
+                    local_best = positive_error;
+                    loca_good = true;
+                    local_index = i;
+                  //best = TestWeakClassifier(feature, feature.values_[itest].value_ + 1, 1, positive_error);
+                }
             }
-        }
-        else{
-            positive_error += W[tindex[pos]];
-            negative_error = 1.0 - positive_error;
+            else{
+                positive_error += W[tindex[pos]];
+                negative_error = 1.0 - positive_error;
 
-            if (negative_error < local_best){
-                //errorR[id] = negative_error;
-                //goodR[id] = false;
-                //indexR[id] = i;
-                local_best = negative_error;
-                loca_good = false;
-                local_index = i;
-              //best = TestWeakClassifier(feature, feature.values_[itest].value_ - 1, -1, negative_error);
+                if (negative_error < local_best){
+                    //errorR[id] = negative_error;
+                    //goodR[id] = false;
+                    //indexR[id] = i;
+                    local_best = negative_error;
+                    loca_good = false;
+                    local_index = i;
+                  //best = TestWeakClassifier(feature, feature.values_[itest].value_ - 1, -1, negative_error);
+                }
             }
+            pos++;
         }
-        pos++;
+        
+        indexR[id] = local_index;
+        goodR[id] = loca_good;
+        errorR[id] = local_best;
     }
-    
-    indexR[id] = local_index;
-    goodR[id] = loca_good;
-    errorR[id] = local_best;
 }
 void select_best_gpu(int featureNum, int testNum, bool * valids, double * weights, double validweight, int* featureIndex,
     int * indexResult, bool * goodResult, double * errorResult){
