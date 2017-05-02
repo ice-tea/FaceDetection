@@ -153,7 +153,7 @@ namespace violajones
     int featureNum = features_values.size();
     int testNum = tests.size();
     int * featureIndexfeatures_values = (int *)malloc(featureNum * testNum * sizeof(int));
-    std::cout << " Feature test index in gpu is ";
+    //std::cout << " Feature test index in gpu is ";
     for(int i=0; i<featureNum; ++i){
       for(int j=0; j<testNum; ++j){
         featureIndexfeatures_values[i*testNum + j] = features_values[i].values_[j].test_index_;

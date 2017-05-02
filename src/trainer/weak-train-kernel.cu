@@ -85,7 +85,7 @@ void select_best_gpu(int featureNum, int testNum, bool * valids, double * weight
     cudaMalloc(&d_i, featureNum *sizeof(int));
     cudaMalloc(&d_g, featureNum *sizeof(bool));
     cudaMalloc(&d_e, featureNum *sizeof(double));
-    KernelWeakTrain<<<1, featureNum>>> (featureNum, testNum, d_f_i, validweight, d_i, d_g, d_e, V, W);
+    KernelWeakTrain<<<1, featureNum>>> (featureNum, testNum, d_f_i, validweight, d_i, d_g, d_e /*,V, W*/);
 
     // Copy array back to host
     cudaMemcpy(indexResult, d_i, featureNum *sizeof(int), cudaMemcpyDeviceToHost); 
