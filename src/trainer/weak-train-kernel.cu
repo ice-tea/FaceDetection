@@ -54,9 +54,9 @@ __global__ void KernelWeakTrain(int featureNum, int testNum, int *tindex,
         pos++;
     }
     
-    indexR[id] = local_best;
+    indexR[id] = local_index;
     goodR[id] = loca_good;
-    errorR[id] = local_index;
+    errorR[id] = local_best;
 }
 void select_best_gpu(int featureNum, int testNum, bool * valids, double * weights, double validweight, int* featureIndex,
     int * indexResult, bool * goodResult, double * errorResult){
