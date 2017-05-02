@@ -233,7 +233,7 @@ namespace violajones
       //TestWeakClassifier tmp(features_values[b_index], features_values[b_index].values_[0].value_, b_good, b_error);
       //best = tmp;
       TestWeakClassifier bestGPU(features_values[f_index], 
-          feature.values_[b_index].value_ + ((b_good)?1:-1), b_good, b_error);
+          features_values[f_index].values_[b_index].value_ + ((b_good)?1:-1), b_good, b_error);
       
       FeatureValues feature1 = features_values[0];
       std::cout << " Feature test index in cpu is ";
