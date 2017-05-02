@@ -19,10 +19,7 @@
 #include "../features/two-horizontal-rectangles-feature.h"
 #include "../features/three-vertical-rectangles-feature.h"
 
-extern void select_best_gpu(bool * valids, double * weights, double validweight, int featureNum, int * featureIndex){
-
-
-}
+extern void select_best_gpu(bool * valids, double * weights, double validweight, int featureNum, int * featureIndex);
 
 namespace violajones
 {
