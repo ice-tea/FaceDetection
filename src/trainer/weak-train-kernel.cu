@@ -9,7 +9,7 @@ __const__ double W[TNUM] = {0.0};
 
 __global__ void KernelWeakTrain(int featureNum, int testNum, int *tindex, 
     double validweight, int* indexR, bool* goodR, double* errorR,
-    const bool * V, const double * W) {
+    /*const bool * V, const double * W*/) {
     // Get our global thread ID
     int id = blockIdx.x*blockDim.x+threadIdx.x;
 
@@ -61,8 +61,8 @@ __global__ void KernelWeakTrain(int featureNum, int testNum, int *tindex,
 void select_best_gpu(int featureNum, int testNum, bool * valids, double * weights, double validweight, int* featureIndex,
     int * indexResult, bool * goodResult, double * errorResult){
 
-    cudaMemcpyToSymbol(V, valids, TNUM *sizeof(bool));
-    cudaMemcpyToSymbol(W, weights, TNUM *sizeof(double));
+    cudaMemcpyToSymbol(V, valids, testNum *sizeof(bool));
+    cudaMemcpyToSymbol(W, weights, testNum *sizeof(double));
 
     int * d_f_i;
     cudaMalloc(&d_f_i, featureNum  * testNum * sizeof( int ));
