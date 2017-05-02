@@ -13,13 +13,15 @@ __global__ void KernelWeakTrain(int *tindex, int testNum, double validweight, in
     __shared__ int index[FNUM];
     __shared__ bool good[FNUM];
     __shared__ double error[FNUM];
-    __shared__ double positive_error[FNUM] = {validweight};
-    __shared__ double negative_error[FNUM] = {validweight};
+    __shared__ double positive_error[FNUM];
+    __shared__ double negative_error[FNUM];
 
 
     index[id] = 0;
     good[id] = true;
     error[id] = std::numeric_limits<double>::max();
+    positive_error[id] = validweight;
+    negative_error[id] = validweight;
 
     int pos = id*FNUM;
     for(int i=0; i<testNum; ++i){
