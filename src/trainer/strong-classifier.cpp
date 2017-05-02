@@ -212,6 +212,11 @@ namespace violajones
       select_best_gpu(featureNum, testNum, valids, weights, validweight, featureIndexfeatures_values,
          b_index, b_good, b_error);
       
+      
+      TestWeakClassifier tmp(features_values[b_index], features_values[b_index].values_[0].value_, 
+          b_good, b_error);
+      best = tmp;
+      
       /*
         std::for_each(features_values.begin(), features_values.end(),
                       [&](FeatureValues& fv) {

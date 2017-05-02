@@ -83,11 +83,15 @@ void select_best_gpu(int featureNum, int testNum, bool * valids, double * weight
     double* r_e = (double*)malloc(featureNum*sizeof(double));
     cudaMemcpy(r_i, d_i, bytes, cudaMemcpyDeviceToHost); 
     cudaMemcpy(r_g, d_g, bytes, cudaMemcpyDeviceToHost); 
-    cudaMemcpy(r_e, d_e, bytes, cudaMemcpyDeviceToHost); 
+    cudaMemcpy(r_e, d_e, bytes, cudaMemcpyDeviceToHost);
 
-    index = 1;
-    good = true;
-    error = validweight;
+    for(int i=0; i<FNUM; ++i){
+        if(r_e[i] < error){
+            error = r_e[i];
+            index = r_i[i];
+            good = r_g[i];
+        }
+    }
 
     // Free device matrices
     cudaFree(d_f_i);
