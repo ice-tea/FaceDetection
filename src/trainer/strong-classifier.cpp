@@ -246,7 +246,6 @@ namespace violajones
                       });
       auto CPUend = std::chrono::steady_clock::now();
       auto CPUdiff = CPUend - CPUstart;
-      auto CPUdiff = end - start;
 
       std::cout << "CPU New weak classifier selected in " << CPUdiff.count() << " seconds (error score : "
       << best.errors_ << ")\n"
