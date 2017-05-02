@@ -161,6 +161,12 @@ namespace violajones
       //std::cout<<std::endl;
     }
 
+    //Read Only Data
+    size_t bytesV = testNum * sizeof( bool );
+    bool * valids = (bool*)malloc(bytesV);
+    size_t bytesF = testNum*sizeof(double);
+    double* weights = (double*)malloc(bytesF);
+
     while (ipass <= Config::learn_pass)
     {
       start = std::chrono::steady_clock::now();
@@ -193,12 +199,6 @@ namespace violajones
       }
       else
       */
-
-      //Read Only Data
-      size_t bytesV = testNum * sizeof( bool );
-      bool * valids = (bool*)malloc(bytesV);
-      size_t bytesF = testNum*sizeof(double);
-      double* weights = (double*)malloc(bytesF);
 
       for(int i=0; i<testNum; ++i){
           valids[i] = tests[i].valid_;
@@ -251,6 +251,8 @@ namespace violajones
       ++ipass;
     }
 
+    free(valids);
+    free(weights);
     auto global_end = std::chrono::steady_clock::now();
     diff = global_end - global_start;
     std::cout << "Training finished in " << diff.count()

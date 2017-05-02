@@ -1,7 +1,7 @@
 #ifndef _WEAK_TRAIN_H_
 #define _WEAK_TRAIN_H_
 
-#define TNUM 6987
+#define TNUM 50
 #define FNUM 882
 
 //__const__ bool V[TNUM] = {false};
