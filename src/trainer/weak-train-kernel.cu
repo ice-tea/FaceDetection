@@ -45,7 +45,7 @@ __global__ void KernelWeakTrain(int featureNum, int testNum, int *tindex,
                 //errorR[id] = negative_error;
                 //goodR[id] = false;
                 //indexR[id] = i;
-                ocal_best = negative_error;
+                local_best = negative_error;
                 loca_good = false;
                 local_index = i;
               //best = TestWeakClassifier(feature, feature.values_[itest].value_ - 1, -1, negative_error);
