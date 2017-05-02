@@ -9,8 +9,7 @@
 __const__ bool V[FNUM] = {false};
 __const__ double W[FNUM] = {0.0};
 
-void select_best_gpu(int featureNum, int testNum, bool * valids, double * weights, double validweight, int * featureIndex,
-    int & index, bool & good, double & error);
+void KernelWeakTrain(int *tindex, int testNum, double validweight, int* indexR, bool* goodR, double* errorR);
 
 void select_best_gpu(int featureNum, int testNum, bool * valids, double * weights, double validweight, int* featureIndex,
     int & index, bool & good, double & error){
