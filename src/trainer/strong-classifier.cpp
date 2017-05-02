@@ -212,6 +212,7 @@ namespace violajones
       select_best_gpu(featureNum, testNum, valids, weights, validweight, featureIndexfeatures_values,
          b_index, b_good, b_error);
       
+      /*
         std::for_each(features_values.begin(), features_values.end(),
                       [&](FeatureValues& fv) {
                         
@@ -219,7 +220,7 @@ namespace violajones
                         if (best.errors_ > new_classifier.errors_)
                           best = new_classifier;
                         });
-      
+      */
 
       end = std::chrono::steady_clock::now();
       diff = end - start;
