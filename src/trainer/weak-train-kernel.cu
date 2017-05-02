@@ -14,7 +14,7 @@ __global__ void KernelWeakTrain(int featureNum, int testNum, int *tindex,
     // Get our global thread ID
     int id = blockIdx.x*blockDim.x+threadIdx.x;
 
-    if(id >= THREADNUM)
+    if(id >= FNUM)
         return;
 
     indexR[id] = 0;
