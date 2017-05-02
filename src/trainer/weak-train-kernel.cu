@@ -4,8 +4,8 @@
 #define TNUM 50
 #define FNUM 882
 
-//__const__ bool V[TNUM] = {false};
-//__const__ double W[TNUM] = {0.0};
+__const__ bool V[TNUM] = {false};
+__const__ double W[TNUM] = {0.0};
 
 __global__ void KernelWeakTrain(int featureNum, int testNum, int *tindex, 
     double validweight, int* indexR, bool* goodR, double* errorR,
@@ -61,21 +61,22 @@ __global__ void KernelWeakTrain(int featureNum, int testNum, int *tindex,
 void select_best_gpu(int featureNum, int testNum, bool * valids, double * weights, double validweight, int* featureIndex,
     int * indexResult, bool * goodResult, double * errorResult){
 
-    //cudaMemcpyToSymbol(V, valids, TNUM *sizeof(bool));
-    //cudaMemcpyToSymbol(W, weights, TNUM *sizeof(double));
+    cudaMemcpyToSymbol(V, valids, TNUM *sizeof(bool));
+    cudaMemcpyToSymbol(W, weights, TNUM *sizeof(double));
 
     int * d_f_i;
     cudaMalloc(&d_f_i, featureNum  * testNum * sizeof( int ));
     cudaMemcpy(d_f_i, featureIndex, featureNum  * testNum * sizeof( int ), cudaMemcpyHostToDevice);
 
     //constant
+    /*
     bool * V;
     cudaMalloc(&V, testNum *sizeof(bool));
     cudaMemcpy(V, valids, testNum *sizeof(bool), cudaMemcpyHostToDevice);
     double * W;
     cudaMalloc(&W, testNum *sizeof(double));
     cudaMemcpy(W, weights, testNum *sizeof(double), cudaMemcpyHostToDevice);
-
+    */
 
     // Launch the device computation threads!
     int * d_i;
