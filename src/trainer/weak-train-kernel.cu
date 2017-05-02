@@ -8,8 +8,8 @@ __const__ bool V[TNUM] = {false};
 __const__ double W[TNUM] = {0.0};
 
 __global__ void KernelWeakTrain(int featureNum, int testNum, int *tindex, 
-    double validweight, int* indexR, bool* goodR, double* errorR,
-    /*const bool * V, const double * W*/) {
+    double validweight, int* indexR, bool* goodR, double* errorR
+    /*, const bool * V, const double * W*/) {
     // Get our global thread ID
     int id = blockIdx.x*blockDim.x+threadIdx.x;
 
