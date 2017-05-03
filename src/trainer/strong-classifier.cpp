@@ -241,6 +241,7 @@ namespace violajones
       << " Height: " << bestGPU.feature_.feature_->frame.height << std::endl;
 
       //Bo Li CPU
+      /*
       auto CPUstart = std::chrono::steady_clock::now();
       std::for_each(features_values.begin(), features_values.end(),
                       [&](FeatureValues& fv) {
@@ -259,7 +260,8 @@ namespace violajones
       << " Y: " << best.feature_.feature_->frame.top_left.y
       << " - Width: " << best.feature_.feature_->frame.width
       << " Height: " << best.feature_.feature_->frame.height << std::endl;
-
+      */
+      best = bestGPU;
       double beta = best.errors_ / (1.0 - best.errors_);
       if (beta < 1.0 / 100000000)
         beta = 1.0 / 100000000;
